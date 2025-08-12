@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities" IgnorableNamespaces="uap rescap">
+  <Identity Name="DuplicateFileFinder.Dev" Publisher="CN=DuplicateFileFinder Dev" Version="1.0.0.0" ProcessorArchitecture="x64" />
+  <Properties>
+    <DisplayName>Duplicate File Finder</DisplayName>
+    <PublisherDisplayName>DuplicateFileFinder Dev</PublisherDisplayName>
+    <Logo>Assets\\Icons\\app-icon-256.png</Logo>
+  </Properties>
+  <Resources>
+    <Resource Language="en-us" />
+    <Resource Language="zh-cn" />
+  </Resources>
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.22621.0" />
+  </Dependencies>
+  <Applications>
+    <Application Id="DuplicateFileFinder" Executable="DuplicateFileFinderWPF.exe" EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements DisplayName="Duplicate File Finder" Description="Find and manage duplicate files" Square150x150Logo="Assets\\Icons\\app-icon-256.png" Square44x44Logo="Assets\\Icons\\app-icon-256.png" BackgroundColor="transparent" />
+      <Extensions>
+        <uap:Extension Category="windows.fullTrustProcess" />
+      </Extensions>
+    </Application>
+  </Applications>
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust" />
+  </Capabilities>
+</Package>

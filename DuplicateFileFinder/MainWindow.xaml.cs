@@ -16,6 +16,7 @@ using ModernWpf.Controls;
 using System.Globalization;
 using System.Runtime.InteropServices; // + P/Invoke
 using System.Windows.Interop;        // + WindowInteropHelper
+using ModernWpf;
 
 namespace DuplicateFileFinderWPF
 {
@@ -94,6 +95,9 @@ namespace DuplicateFileFinderWPF
             
             // 初始化语言菜单状态
             UpdateLanguageMenuItems();
+
+            // 取消旧的主题菜单初始化（改为设置弹窗）
+            // UpdateThemeMenuItems();
         }
 
         private void LoadApplicationIcon()
@@ -780,12 +784,48 @@ namespace DuplicateFileFinderWPF
         private async void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
             var localizer = LocalizationManager.Instance;
+
             var dialog = new ContentDialog
             {
-                Title = localizer.SettingsDialogTitle,
-                Content = localizer.SettingsInDevelopment,
+                Title = localizer.Settings,
                 CloseButtonText = localizer.OK
             };
+
+            // 构建设置面板（包含主题切换）
+            var panel = new System.Windows.Controls.StackPanel { Orientation = System.Windows.Controls.Orientation.Vertical, Margin = new Thickness(8) };
+            panel.Children.Add(new System.Windows.Controls.TextBlock { Text = "Theme", Margin = new Thickness(0,0,0,8), Foreground = (System.Windows.Media.Brush)FindResource("TextPrimaryBrush") });
+
+            var themeRow = new System.Windows.Controls.StackPanel { Orientation = System.Windows.Controls.Orientation.Horizontal };
+            var btnSystem = new System.Windows.Controls.Button { Content = "System", Margin = new Thickness(0,0,8,0), Style = (Style)FindResource("SecondaryButtonStyle") };
+            var btnLight  = new System.Windows.Controls.Button { Content = "Light",  Margin = new Thickness(0,0,8,0), Style = (Style)FindResource("SecondaryButtonStyle") };
+            var btnDark   = new System.Windows.Controls.Button { Content = "Dark",   Style = (Style)FindResource("SecondaryButtonStyle") };
+
+            btnSystem.Click += (s, _)=>
+            {
+                ThemeManager.Current.ApplicationTheme = null; // 跟随系统
+                DuplicateFileFinderWPF.Properties.Settings.Default.Theme = string.Empty;
+                DuplicateFileFinderWPF.Properties.Settings.Default.Save();
+            };
+            btnLight.Click += (s, _)=>
+            {
+                ThemeManager.Current.ApplicationTheme = ApplicationTheme.Light;
+                DuplicateFileFinderWPF.Properties.Settings.Default.Theme = "Light";
+                DuplicateFileFinderWPF.Properties.Settings.Default.Save();
+            };
+            btnDark.Click += (s, _)=>
+            {
+                ThemeManager.Current.ApplicationTheme = ApplicationTheme.Dark;
+                DuplicateFileFinderWPF.Properties.Settings.Default.Theme = "Dark";
+                DuplicateFileFinderWPF.Properties.Settings.Default.Save();
+            };
+
+            themeRow.Children.Add(btnSystem);
+            themeRow.Children.Add(btnLight);
+            themeRow.Children.Add(btnDark);
+
+            panel.Children.Add(themeRow);
+            dialog.Content = panel;
+
             await dialog.ShowAsync();
         }
 
@@ -1717,6 +1757,14 @@ namespace DuplicateFileFinderWPF
         }
         #endregion
         #endregion
+
+        private void UpdateThemeMenuItems()
+        {
+            // Legacy theme menu removed; no-op
+        }
+        
+        // 删除 ThemeSystemMenuItem_Click / ThemeLightMenuItem_Click / ThemeDarkMenuItem_Click
+        // 主题切换逻辑已在 SettingsButton_Click 中实现
     }
 }
 
