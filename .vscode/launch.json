@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": ".NET WPF Launch",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/DuplicateFileFinder/bin/Debug/net6.0-windows/DuplicateFileFinderWPF.exe",
+            "args": [],
+            "cwd": "${workspaceFolder}/DuplicateFileFinder",
+            "stopAtEntry": false,
+            "console": "internalConsole",
+            "internalConsoleOptions": "openOnSessionStart"
+        }
+    ]
+}

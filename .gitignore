@@ -1,0 +1,56 @@
+# .NET / Visual Studio / VS Code
+# Build outputs
+bin/
+obj/
+[Bb]uild/
+[Dd]ebug/
+[Rr]elease/
+*.exe
+*.dll
+*.pdb
+*.appx
+*.appxbundle
+*.msix
+*.msixbundle
+
+# VS
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# VS Code
+.vscode/*
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# NuGet
+*.nupkg
+.nuget/
+packages/
+project.lock.json
+project.assets.json
+*.nuget.props
+*.nuget.targets
+
+# Logs
+*.log
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Python helpers (icon scripts)
+*.pyc
+__pycache__/
+
+# Generated resources
+DuplicateFileFinder/**/Resources/Strings.*.resources
+DuplicateFileFinder/**/en-US/
+DuplicateFileFinder/**/zh-CN/
+
+# App publish artifacts
+Publish*/
+*.Publish.xml

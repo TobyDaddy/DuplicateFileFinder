@@ -1,0 +1,517 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!--
+    Microsoft ResX Schema
+
+    Version 2.0
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
+    associated with the data types.
+
+    Example:
+
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+
+    There are any number of "resheader" rows that contain simple
+    name/value pairs.
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
+    mimetype set.
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
+    extensible. For a given mimetype the value must be set accordingly:
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
+    read any of the formats listed below.
+
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AppTitle" xml:space="preserve">
+    <value>重复文件查找器 - 专业版</value>
+    <comment/>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>语言</value>
+    <comment/>
+  </data>
+  <data name="SelectFolder" xml:space="preserve">
+    <value>选择文件夹:</value>
+    <comment/>
+  </data>
+  <data name="Browse" xml:space="preserve">
+    <value>浏览</value>
+    <comment/>
+  </data>
+  <data name="StartSearch" xml:space="preserve">
+    <value>开始搜索</value>
+    <comment/>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>取消</value>
+    <comment/>
+  </data>
+  <data name="StartCleanup" xml:space="preserve">
+    <value>开始清理重复文件</value>
+    <comment/>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>删除</value>
+    <comment/>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>打开</value>
+    <comment/>
+  </data>
+  <data name="ShowFileLocation" xml:space="preserve">
+    <value>显示文件位置</value>
+    <comment/>
+  </data>
+  <data name="Properties" xml:space="preserve">
+    <value>属性</value>
+    <comment/>
+  </data>
+  <data name="PreviewGroup" xml:space="preserve">
+    <value>预览重复组</value>
+    <comment/>
+  </data>
+  <data name="MarkDelete" xml:space="preserve">
+    <value>标记删除</value>
+    <comment/>
+  </data>
+  <data name="FilePreview" xml:space="preserve">
+    <value>文件预览</value>
+    <comment/>
+  </data>
+  <data name="UnsupportedFileType" xml:space="preserve">
+    <value>不支持的文件类型。</value>
+    <comment/>
+  </data>
+  <data name="InvalidDirectory" xml:space="preserve">
+    <value>提供的路径不是有效的目录。</value>
+    <comment/>
+  </data>
+  <data name="InvalidFilePath" xml:space="preserve">
+    <value>无效的文件路径</value>
+    <comment/>
+  </data>
+  <data name="CannotShowProperties" xml:space="preserve">
+    <value>无法显示文件属性窗口。</value>
+    <comment/>
+  </data>
+  <data name="ConfirmDeleteFile" xml:space="preserve">
+    <value>您确定要删除文件吗</value>
+    <comment/>
+  </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>确定删除</value>
+    <comment/>
+  </data>
+  <data name="SearchCancelled" xml:space="preserve">
+    <value>搜索已取消。</value>
+    <comment/>
+  </data>
+  <data name="NoDuplicatesFound" xml:space="preserve">
+    <value>未找到重复文件。</value>
+    <comment/>
+  </data>
+  <data name="TotalDuplicatesFound" xml:space="preserve">
+    <value>总共找到的重复文件</value>
+    <comment/>
+  </data>
+  <data name="CannotGetFolderPath" xml:space="preserve">
+    <value>无法获取文件夹路径。</value>
+    <comment/>
+  </data>
+  <data name="MarkDeleteFormTitle" xml:space="preserve">
+    <value>标记删除</value>
+    <comment/>
+  </data>
+  <data name="MarkSingleFile" xml:space="preserve">
+    <value>仅标记当前文件</value>
+    <comment/>
+  </data>
+  <data name="UnmarkSingleFile" xml:space="preserve">
+    <value>取消当前文件标记</value>
+    <comment/>
+  </data>
+  <data name="MarkSameFolder" xml:space="preserve">
+    <value>标记当前文件所在文件夹中的所有重复文件</value>
+    <comment/>
+  </data>
+  <data name="MarkDeleteFormInfo" xml:space="preserve">
+    <value>您可以标记需要删除的文件，注意标记并不会实际执行删除操作，您可以随时取消标记。</value>
+    <comment/>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>确认</value>
+    <comment/>
+  </data>
+  <data name="ScannedFiles" xml:space="preserve">
+    <value>总共扫描文件</value>
+    <comment/>
+  </data>
+  <data name="MarkedForDeletion" xml:space="preserve">
+    <value>被标记删除的文件数量</value>
+    <comment/>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>错误</value>
+    <comment/>
+  </data>
+  <data name="ConfirmDeleteAllMarkedFiles" xml:space="preserve">
+    <value>确定要删除所有标记的文件吗？</value>
+    <comment/>
+  </data>
+  <data name="RotateRight" xml:space="preserve">
+    <value>向右旋转90度</value>
+    <comment/>
+  </data>
+  <data name="Files" xml:space="preserve">
+    <value>个文件</value>
+    <comment/>
+  </data>
+  <data name="SpaceToSave" xml:space="preserve">
+    <value>可节省空间</value>
+    <comment/>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>大小</value>
+    <comment/>
+  </data>
+  <data name="LastModified" xml:space="preserve">
+    <value>修改时间</value>
+    <comment/>
+  </data>
+  <data name="Path" xml:space="preserve">
+    <value>路径</value>
+    <comment/>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>English</value>
+    <comment/>
+  </data>
+  <data name="Chinese" xml:space="preserve">
+    <value>中文</value>
+    <comment/>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>设置</value>
+    <comment/>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>帮助</value>
+    <comment/>
+  </data>
+  <data name="Minimize" xml:space="preserve">
+    <value>最小化</value>
+    <comment/>
+  </data>
+  <data name="Maximize" xml:space="preserve">
+    <value>最大化</value>
+    <comment/>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>关闭</value>
+    <comment/>
+  </data>
+  <data name="DeleteMarkedFiles" xml:space="preserve">
+    <value>删除标记文件</value>
+    <comment/>
+  </data>
+  <data name="ShowInExplorer" xml:space="preserve">
+    <value>在资源管理器中显示</value>
+    <comment/>
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>就绪 - 请选择文件夹开始扫描重复文件</value>
+    <comment/>
+  </data>
+  <data name="Scanning" xml:space="preserve">
+    <value>扫描中...</value>
+    <comment/>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>处理中...</value>
+    <comment/>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>完成</value>
+    <comment/>
+  </data>
+  <data name="ScanningFiles" xml:space="preserve">
+    <value>扫描文件中...</value>
+    <comment/>
+  </data>
+  <data name="ScanCancelled" xml:space="preserve">
+    <value>扫描已取消</value>
+    <comment/>
+  </data>
+  <data name="ScanError" xml:space="preserve">
+    <value>扫描出错</value>
+    <comment/>
+  </data>
+  <data name="DuplicateGroup" xml:space="preserve">
+    <value>重复组</value>
+    <comment/>
+  </data>
+  <data name="FoundDuplicatesStatus" xml:space="preserve">
+    <value>找到 {0} 个重复文件，扫描了 {1} 个文件，标记删除 {2} 个，将节省 {3}</value>
+    <comment/>
+  </data>
+  <data name="NoDuplicatesStatus" xml:space="preserve">
+    <value>未发现重复文件，扫描了 {0} 个文件</value>
+    <comment/>
+  </data>
+  <data name="CannotMarkAllFiles" xml:space="preserve">
+    <value>不能将重复组中的所有文件都标记为删除！至少需要保留一个文件。</value>
+    <comment/>
+  </data>
+  <data name="OperationRestriction" xml:space="preserve">
+    <value>操作限制</value>
+    <comment/>
+  </data>
+  <data name="SettingsDialogTitle" xml:space="preserve">
+    <value>设置</value>
+    <comment/>
+  </data>
+  <data name="SettingsInDevelopment" xml:space="preserve">
+    <value>设置功能正在开发中...</value>
+    <comment/>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>确定</value>
+    <comment/>
+  </data>
+  <data name="HelpDialogTitle" xml:space="preserve">
+    <value>帮助</value>
+    <comment/>
+  </data>
+  <data name="HelpContent" xml:space="preserve">
+    <value>重复文件查找器 v2.0
+
+功能:
+• 扫描重复文件
+• 图片和视频预览
+• 现代化界面</value>
+    <comment/>
+  </data>
+  <data name="SelectFolderDescription" xml:space="preserve">
+    <value>选择要扫描的文件夹</value>
+    <comment/>
+  </data>
+  <data name="CancellingScan" xml:space="preserve">
+    <value>正在取消扫描...</value>
+    <comment/>
+  </data>
+  <data name="CancellingScanStatus" xml:space="preserve">
+    <value>正在取消扫描...</value>
+    <comment/>
+  </data>
+  <data name="ScanFiles" xml:space="preserve">
+    <value>扫描文件</value>
+    <comment/>
+  </data>
+  <data name="FileList" xml:space="preserve">
+    <value>文件列表</value>
+    <comment/>
+  </data>
+  <data name="FilePreviewTitle" xml:space="preserve">
+    <value>文件预览</value>
+    <comment/>
+  </data>
+  <data name="PreviewWithZoomAndDrag" xml:space="preserve">
+    <value>预览: {0} (滚轮缩放，拖拽移动)</value>
+    <comment/>
+  </data>
+  <data name="CannotLoadImage" xml:space="preserve">
+    <value>无法加载图片: {0}</value>
+    <comment/>
+  </data>
+  <data name="VideoLoading" xml:space="preserve">
+    <value>视频: {0} (加载中...)</value>
+    <comment/>
+  </data>
+  <data name="CannotLoadVideo" xml:space="preserve">
+    <value>无法加载视频: {0}</value>
+    <comment/>
+  </data>
+  <data name="UnsupportedFileFormat" xml:space="preserve">
+    <value>不支持的文件格式</value>
+    <comment/>
+  </data>
+  <data name="SelectFileToPreview" xml:space="preserve">
+    <value>选择文件以预览</value>
+    <comment/>
+  </data>
+  <data name="GetInfoFailed" xml:space="preserve">
+    <value>获取失败</value>
+    <comment/>
+  </data>
+  <data name="RemainingGroupsStatus" xml:space="preserve">
+    <value>剩余 {0} 个重复组，标记删除 {1} 个文件</value>
+    <comment/>
+  </data>
+  <data name="TotalGroupsStatus" xml:space="preserve">
+    <value>共 {0} 个重复组，标记删除 {1} 个文件</value>
+    <comment/>
+  </data>
+  <data name="AllDuplicatesDeleted" xml:space="preserve">
+    <value>所有重复文件已删除</value>
+    <comment/>
+  </data>
+  <data name="ScanningStatus" xml:space="preserve">
+    <value>正在扫描重复文件...</value>
+    <comment/>
+  </data>
+  <data name="DuplicateGroupPrefix" xml:space="preserve">
+    <value>重复组 - </value>
+    <comment/>
+  </data>
+  <data name="UpdateStatusFound" xml:space="preserve">
+    <value>找到 {0} 个重复文件，扫描了 {1} 个文件，标记删除 {2} 个，将节省 {3}</value>
+    <comment/>
+  </data>
+  <data name="VideoPlayError" xml:space="preserve">
+    <value>视频播放错误: {0}</value>
+    <comment/>
+  </data>
+  <data name="VideoStopError" xml:space="preserve">
+    <value>视频停止错误: {0}</value>
+    <comment/>
+  </data>
+  <data name="VideoPlaybackFailed" xml:space="preserve">
+    <value>视频播放失败: {0}</value>
+    <comment/>
+  </data>
+  <data name="VideoClickToPlay" xml:space="preserve">
+    <value>视频: {0} (点击播放按钮开始播放)</value>
+    <comment/>
+  </data>
+  <data name="VideoInitError" xml:space="preserve">
+    <value>视频初始化错误: {0}</value>
+    <comment/>
+  </data>
+  <data name="ProgressSeekError" xml:space="preserve">
+    <value>进度条跳转错误: {0}</value>
+    <comment/>
+  </data>
+  <data name="PreviewWithZoom" xml:space="preserve">
+    <value>预览: {0} (缩放: {1})</value>
+    <comment/>
+  </data>
+  <data name="FileProperties" xml:space="preserve">
+    <value>文件属性</value>
+    <comment/>
+  </data>
+  <data name="CancelScan" xml:space="preserve">
+    <value>取消扫描</value>
+    <comment/>
+  </data>
+  <data name="CreationDate" xml:space="preserve">
+    <value>创建日期：</value>
+    <comment/>
+  </data>
+  <data name="ModificationDate" xml:space="preserve">
+    <value>修改日期：</value>
+    <comment/>
+  </data>
+  <data name="FileSize" xml:space="preserve">
+    <value>文件大小：</value>
+    <comment/>
+  </data>
+  <data name="FileLocation" xml:space="preserve">
+    <value>文件位置：</value>
+    <comment/>
+  </data>
+</root>

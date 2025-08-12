@@ -1,0 +1,48 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DuplicateFileFinderWPF", "DuplicateFileFinder\DuplicateFileFinderWPF.csproj", "{83004F46-08F5-F924-89DB-519ECBC14C92}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DuplicateFileFinder (1)", "DuplicateFileFinder (1)", "{77AF23A7-B330-CF06-0F99-1D9867537152}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assets", "Assets", "{D26B0AA5-6E59-0846-60DB-89519A636EAE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IconGenerator", "DuplicateFileFinder\Assets\Icons\IconGenerator.csproj", "{545E38E5-98BA-9270-44C2-7C0E8C94F71A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Icons", "Icons", "{7FD51442-77E0-8ADD-2F1E-7AF441A74EC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IconGenerator", "DuplicateFileFinder\Assets\Icons\IconGenerator\IconGenerator.csproj", "{F985B28D-978D-13BC-E9FC-583B42F444D3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{83004F46-08F5-F924-89DB-519ECBC14C92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83004F46-08F5-F924-89DB-519ECBC14C92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83004F46-08F5-F924-89DB-519ECBC14C92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83004F46-08F5-F924-89DB-519ECBC14C92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{545E38E5-98BA-9270-44C2-7C0E8C94F71A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{545E38E5-98BA-9270-44C2-7C0E8C94F71A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{545E38E5-98BA-9270-44C2-7C0E8C94F71A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{545E38E5-98BA-9270-44C2-7C0E8C94F71A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F985B28D-978D-13BC-E9FC-583B42F444D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F985B28D-978D-13BC-E9FC-583B42F444D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F985B28D-978D-13BC-E9FC-583B42F444D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F985B28D-978D-13BC-E9FC-583B42F444D3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D26B0AA5-6E59-0846-60DB-89519A636EAE} = {77AF23A7-B330-CF06-0F99-1D9867537152}
+		{545E38E5-98BA-9270-44C2-7C0E8C94F71A} = {D26B0AA5-6E59-0846-60DB-89519A636EAE}
+		{7FD51442-77E0-8ADD-2F1E-7AF441A74EC6} = {D26B0AA5-6E59-0846-60DB-89519A636EAE}
+		{F985B28D-978D-13BC-E9FC-583B42F444D3} = {7FD51442-77E0-8ADD-2F1E-7AF441A74EC6}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BBE7B573-5D7C-4668-8E0C-618C8295682E}
+	EndGlobalSection
+EndGlobal

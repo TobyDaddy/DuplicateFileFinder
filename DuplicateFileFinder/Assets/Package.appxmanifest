@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  IgnorableNamespaces="uap rescap">
+
+  <Identity
+    Name="YourCompany.DuplicateFileCleaner"
+    Publisher="CN=Your Company"
+    Version="2.0.0.0" />
+
+  <mp:PhoneIdentity PhoneProductId="DuplicateFileCleaner" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+
+  <Properties>
+    <DisplayName>Duplicate File Cleaner</DisplayName>
+    <PublisherDisplayName>Your Company</PublisherDisplayName>
+    <Logo>Assets\Icons\StoreLogo.png</Logo>
+    <Description>Professional duplicate file finder and cleaner for Windows</Description>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.17763.0" MaxVersionTested="10.0.19041.0" />
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.19041.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="x-generate"/>
+  </Resources>
+
+  <Applications>
+    <Application Id="App"
+      Executable="DuplicateFileFinderWPF.exe"
+      EntryPoint="DuplicateFileFinderWPF.App">
+      <uap:VisualElements
+        DisplayName="Duplicate File Cleaner"
+        Description="Professional duplicate file finder and cleaner"
+        BackgroundColor="transparent"
+        Square150x150Logo="Assets\Icons\Square150x150Logo.png"
+        Square44x44Logo="Assets\Icons\Square44x44Logo.png">
+        <uap:DefaultTile Wide310x150Logo="Assets\Icons\Wide310x150Logo.png" 
+                         Square310x310Logo="Assets\Icons\Square310x310Logo.png"/>
+        <uap:SplashScreen Image="Assets\Icons\SplashScreen.png" />
+      </uap:VisualElements>
+      
+      <Extensions>
+        <uap:Extension Category="windows.fileTypeAssociation">
+          <uap:FileTypeAssociation Name="duplicatefiles">
+            <uap:SupportedFileTypes>
+              <uap:FileType>.jpg</uap:FileType>
+              <uap:FileType>.jpeg</uap:FileType>
+              <uap:FileType>.png</uap:FileType>
+              <uap:FileType>.gif</uap:FileType>
+              <uap:FileType>.bmp</uap:FileType>
+              <uap:FileType>.mp4</uap:FileType>
+              <uap:FileType>.avi</uap:FileType>
+              <uap:FileType>.mov</uap:FileType>
+              <uap:FileType>.txt</uap:FileType>
+              <uap:FileType>.doc</uap:FileType>
+              <uap:FileType>.pdf</uap:FileType>
+            </uap:SupportedFileTypes>
+          </uap:FileTypeAssociation>
+        </uap:Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <Capability Name="internetClient" />
+    <rescap:Capability Name="broadFileSystemAccess" />
+  </Capabilities>
+</Package>

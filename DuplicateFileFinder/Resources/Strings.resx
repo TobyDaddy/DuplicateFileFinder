@@ -1,0 +1,501 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!--
+    Microsoft ResX Schema
+
+    Version 2.0
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
+    associated with the data types.
+
+    Example:
+
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+
+    There are any number of "resheader" rows that contain simple
+    name/value pairs.
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
+    mimetype set.
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
+    extensible. For a given mimetype the value must be set accordingly:
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
+    read any of the formats listed below.
+
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AppTitle" xml:space="preserve">
+    <value>Duplicate File Cleaner</value>
+    <comment/>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+    <comment/>
+  </data>
+  <data name="SelectFolder" xml:space="preserve">
+    <value>Select Folder:</value>
+    <comment/>
+  </data>
+  <data name="Browse" xml:space="preserve">
+    <value>Browse</value>
+    <comment/>
+  </data>
+  <data name="StartSearch" xml:space="preserve">
+    <value>Start Search</value>
+    <comment/>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+    <comment/>
+  </data>
+  <data name="StartCleanup" xml:space="preserve">
+    <value>Start Cleanup</value>
+    <comment/>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+    <comment/>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Open</value>
+    <comment/>
+  </data>
+  <data name="ShowFileLocation" xml:space="preserve">
+    <value>Show File Location</value>
+    <comment/>
+  </data>
+  <data name="Properties" xml:space="preserve">
+    <value>Properties</value>
+    <comment/>
+  </data>
+  <data name="PreviewGroup" xml:space="preserve">
+    <value>Preview Group</value>
+    <comment/>
+  </data>
+  <data name="MarkDelete" xml:space="preserve">
+    <value>Mark Delete</value>
+    <comment/>
+  </data>
+  <data name="FilePreview" xml:space="preserve">
+    <value>File Preview</value>
+    <comment/>
+  </data>
+  <data name="UnsupportedFileType" xml:space="preserve">
+    <value>Unsupported file type.</value>
+    <comment/>
+  </data>
+  <data name="InvalidDirectory" xml:space="preserve">
+    <value>The provided path is not a valid directory.</value>
+    <comment/>
+  </data>
+  <data name="InvalidFilePath" xml:space="preserve">
+    <value>Invalid file path</value>
+    <comment/>
+  </data>
+  <data name="CannotShowProperties" xml:space="preserve">
+    <value>Cannot show file properties window.</value>
+    <comment/>
+  </data>
+  <data name="ConfirmDeleteFile" xml:space="preserve">
+    <value>Are you sure you want to delete the file</value>
+    <comment/>
+  </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>Confirm Delete</value>
+    <comment/>
+  </data>
+  <data name="SearchCancelled" xml:space="preserve">
+    <value>Search cancelled.</value>
+    <comment/>
+  </data>
+  <data name="NoDuplicatesFound" xml:space="preserve">
+    <value>No duplicate files found.</value>
+    <comment/>
+  </data>
+  <data name="TotalDuplicatesFound" xml:space="preserve">
+    <value>Total duplicates found</value>
+    <comment/>
+  </data>
+  <data name="CannotGetFolderPath" xml:space="preserve">
+    <value>Cannot get folder path.</value>
+    <comment/>
+  </data>
+  <data name="MarkDeleteFormTitle" xml:space="preserve">
+    <value>Mark Delete</value>
+    <comment/>
+  </data>
+  <data name="MarkSingleFile" xml:space="preserve">
+    <value>Mark only the current file</value>
+    <comment/>
+  </data>
+  <data name="UnmarkSingleFile" xml:space="preserve">
+    <value>Unmark the current file</value>
+    <comment/>
+  </data>
+  <data name="MarkSameFolder" xml:space="preserve">
+    <value>Mark all duplicate files in the same folder as the current file</value>
+    <comment/>
+  </data>
+  <data name="MarkDeleteFormInfo" xml:space="preserve">
+    <value>You can mark files to be deleted. Note that marking does not actually delete the files, and you can unmark them at any time.</value>
+    <comment/>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirm</value>
+    <comment/>
+  </data>
+  <data name="ScannedFiles" xml:space="preserve">
+    <value>Total Scanned Files</value>
+    <comment/>
+  </data>
+  <data name="MarkedForDeletion" xml:space="preserve">
+    <value>Marked for Deletion</value>
+    <comment/>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+    <comment/>
+  </data>
+  <data name="ConfirmDeleteAllMarkedFiles" xml:space="preserve">
+    <value>Are you sure you want to delete all marked files?</value>
+    <comment/>
+  </data>
+  <data name="RotateRight" xml:space="preserve">
+    <value>Rotate Right 90°</value>
+    <comment/>
+  </data>
+  <data name="Files" xml:space="preserve">
+    <value>files</value>
+    <comment/>
+  </data>
+  <data name="SpaceToSave" xml:space="preserve">
+    <value>Space to save</value>
+    <comment/>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>Size</value>
+    <comment/>
+  </data>
+  <data name="LastModified" xml:space="preserve">
+    <value>Last Modified</value>
+    <comment/>
+  </data>
+  <data name="Path" xml:space="preserve">
+    <value>Path</value>
+    <comment/>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>English</value>
+    <comment/>
+  </data>
+  <data name="Chinese" xml:space="preserve">
+    <value>中文</value>
+    <comment/>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+    <comment/>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Help</value>
+    <comment/>
+  </data>
+  <data name="Minimize" xml:space="preserve">
+    <value>Minimize</value>
+    <comment/>
+  </data>
+  <data name="Maximize" xml:space="preserve">
+    <value>Maximize</value>
+    <comment/>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+    <comment/>
+  </data>
+  <data name="DeleteMarkedFiles" xml:space="preserve">
+    <value>Delete Marked Files</value>
+    <comment/>
+  </data>
+  <data name="ShowInExplorer" xml:space="preserve">
+    <value>Show in Explorer</value>
+    <comment/>
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>Ready - Please select a folder to start scanning for duplicate files</value>
+    <comment/>
+  </data>
+  <data name="Scanning" xml:space="preserve">
+    <value>Scanning...</value>
+    <comment/>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Processing...</value>
+    <comment/>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Completed</value>
+    <comment/>
+  </data>
+  <data name="ScanningFiles" xml:space="preserve">
+    <value>Scanning files...</value>
+    <comment/>
+  </data>
+  <data name="ScanCancelled" xml:space="preserve">
+    <value>Scan cancelled</value>
+    <comment/>
+  </data>
+  <data name="ScanError" xml:space="preserve">
+    <value>Scan error</value>
+    <comment/>
+  </data>
+  <data name="DuplicateGroup" xml:space="preserve">
+    <value>Duplicate Group</value>
+    <comment/>
+  </data>
+  <data name="FoundDuplicatesStatus" xml:space="preserve">
+    <value>Found {0} duplicate files, scanned {1} files, marked for deletion {2}, will save {3}</value>
+    <comment/>
+  </data>
+  <data name="NoDuplicatesStatus" xml:space="preserve">
+    <value>No duplicate files found, scanned {0} files</value>
+    <comment/>
+  </data>
+  <data name="CannotMarkAllFiles" xml:space="preserve">
+    <value>Cannot mark all files in a duplicate group for deletion! At least one file must be kept.</value>
+    <comment/>
+  </data>
+  <data name="OperationRestriction" xml:space="preserve">
+    <value>Operation Restriction</value>
+    <comment/>
+  </data>
+  <data name="SettingsDialogTitle" xml:space="preserve">
+    <value>Settings</value>
+    <comment/>
+  </data>
+  <data name="SettingsInDevelopment" xml:space="preserve">
+    <value>Settings feature is under development...</value>
+    <comment/>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+    <comment/>
+  </data>
+  <data name="HelpDialogTitle" xml:space="preserve">
+    <value>Help</value>
+    <comment/>
+  </data>
+  <data name="HelpContent" xml:space="preserve">
+    <value>Duplicate File Finder v2.0
+
+Features:
+• Scan duplicate files
+• Image and video preview
+• Modern interface</value>
+    <comment/>
+  </data>
+  <data name="SelectFolderDescription" xml:space="preserve">
+    <value>Select folder to scan</value>
+    <comment/>
+  </data>
+  <data name="CancellingScan" xml:space="preserve">
+    <value>Cancelling scan...</value>
+    <comment/>
+  </data>
+  <data name="CancellingScanStatus" xml:space="preserve">
+    <value>Cancelling scan...</value>
+    <comment/>
+  </data>
+  <data name="ScanFiles" xml:space="preserve">
+    <value>Scan Files</value>
+    <comment/>
+  </data>
+  <data name="FileList" xml:space="preserve">
+    <value>File List</value>
+    <comment/>
+  </data>
+  <data name="FilePreviewTitle" xml:space="preserve">
+    <value>File Preview</value>
+    <comment/>
+  </data>
+  <data name="PreviewWithZoomAndDrag" xml:space="preserve">
+    <value>Preview: {0} (scroll to zoom, drag to move)</value>
+    <comment/>
+  </data>
+  <data name="CannotLoadImage" xml:space="preserve">
+    <value>Cannot load image: {0}</value>
+    <comment/>
+  </data>
+  <data name="VideoLoading" xml:space="preserve">
+    <value>Video: {0} (loading...)</value>
+    <comment/>
+  </data>
+  <data name="CannotLoadVideo" xml:space="preserve">
+    <value>Cannot load video: {0}</value>
+    <comment/>
+  </data>
+  <data name="UnsupportedFileFormat" xml:space="preserve">
+    <value>Unsupported file format</value>
+    <comment/>
+  </data>
+  <data name="SelectFileToPreview" xml:space="preserve">
+    <value>Select a file to preview</value>
+    <comment/>
+  </data>
+  <data name="GetInfoFailed" xml:space="preserve">
+    <value>Failed to get info</value>
+    <comment/>
+  </data>
+  <data name="RemainingGroupsStatus" xml:space="preserve">
+    <value>Remaining {0} duplicate groups, marked for deletion {1} files</value>
+    <comment/>
+  </data>
+  <data name="TotalGroupsStatus" xml:space="preserve">
+    <value>Total {0} duplicate groups, marked for deletion {1} files</value>
+    <comment/>
+  </data>
+  <data name="AllDuplicatesDeleted" xml:space="preserve">
+    <value>All duplicate files have been deleted</value>
+    <comment/>
+  </data>
+  <data name="ScanningStatus" xml:space="preserve">
+    <value>Scanning for duplicate files...</value>
+    <comment/>
+  </data>
+  <data name="DuplicateGroupPrefix" xml:space="preserve">
+    <value>Duplicate Group - </value>
+    <comment/>
+  </data>
+  <data name="UpdateStatusFound" xml:space="preserve">
+    <value>Found {0} duplicate files, scanned {1} files, marked for deletion {2} files, will save {3}</value>
+    <comment/>
+  </data>
+  <data name="VideoPlayError" xml:space="preserve">
+    <value>Video playback error: {0}</value>
+    <comment/>
+  </data>
+  <data name="VideoStopError" xml:space="preserve">
+    <value>Video stop error: {0}</value>
+    <comment/>
+  </data>
+  <data name="VideoPlaybackFailed" xml:space="preserve">
+    <value>Video playback failed: {0}</value>
+    <comment/>
+  </data>
+  <data name="VideoClickToPlay" xml:space="preserve">
+    <value>Video: {0} (Click play button to start)</value>
+    <comment/>
+  </data>
+  <data name="VideoInitError" xml:space="preserve">
+    <value>Video initialization error: {0}</value>
+    <comment/>
+  </data>
+  <data name="ProgressSeekError" xml:space="preserve">
+    <value>Progress seek error: {0}</value>
+    <comment/>
+  </data>
+  <data name="PreviewWithZoom" xml:space="preserve">
+    <value>Preview: {0} (Zoom: {1})</value>
+    <comment/>
+  </data>
+  <data name="FileProperties" xml:space="preserve">
+    <value>File Properties</value>
+    <comment/>
+  </data>
+  <data name="CancelScan" xml:space="preserve">
+    <value>Cancel Scan</value>
+    <comment/>
+  </data>
+</root>
