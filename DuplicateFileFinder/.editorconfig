@@ -1,0 +1,7 @@
+root = true
+
+[*.{cs,vb}]
+# 将 CA1416（平台兼容性）降为建议或静默；如果你更希望看到它，改回 warning
+# dotnet_diagnostic.CA1416.severity = suggestion
+
+dotnet_diagnostic.WFAC010.severity = none

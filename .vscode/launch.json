@@ -2,11 +2,23 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": ".NET WPF Launch",
+            "name": ".NET WPF Debug (F5)",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/DuplicateFileFinder/bin/Debug/net6.0-windows/DuplicateFileFinderWPF.exe",
+            "program": "${workspaceFolder}/DuplicateFileFinder/bin/Debug/net6.0-windows/win10-x64/DuplicateFileFinderWPF.exe",
+            "args": [],
+            "cwd": "${workspaceFolder}/DuplicateFileFinder",
+            "stopAtEntry": false,
+            "console": "internalConsole",
+            "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "name": ".NET WPF Release (Ctrl+F5)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-release",
+            "program": "${workspaceFolder}/DuplicateFileFinder/bin/Release/net6.0-windows/win10-x64/DuplicateFileFinderWPF.exe",
             "args": [],
             "cwd": "${workspaceFolder}/DuplicateFileFinder",
             "stopAtEntry": false,

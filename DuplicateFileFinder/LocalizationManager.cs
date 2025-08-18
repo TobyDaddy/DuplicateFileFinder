@@ -42,7 +42,7 @@ namespace DuplicateFileFinderWPF
             // 通知所有绑定的UI元素更新
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]"));
             
-            // 逐个通知每个属性更新
+            // 逐个通知每个属性更新（仅保留实际使用的键）
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AppTitle)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Language)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectFolder)));
@@ -51,16 +51,10 @@ namespace DuplicateFileFinderWPF
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Cancel)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Delete)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FilePreview)));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Properties)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RotateRight)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ScannedFiles)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MarkedForDeletion)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Error)));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Files)));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SpaceToSave)));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Size)));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LastModified)));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Path)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(English)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Chinese)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Settings)));
@@ -82,8 +76,6 @@ namespace DuplicateFileFinderWPF
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NoDuplicatesStatus)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CannotMarkAllFiles)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(OperationRestriction)));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SettingsDialogTitle)));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SettingsInDevelopment)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(OK)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HelpDialogTitle)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HelpContent)));
@@ -114,14 +106,27 @@ namespace DuplicateFileFinderWPF
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ProgressSeekError)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PreviewWithZoom)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FileProperties)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CancelScan)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CreationDate)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ModificationDate)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FileSize)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FileLocation)));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CancelScan)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Confirm)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(OpenLocationTooltip)));
+
+            // 移动到文件夹流程相关
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ConfirmMoveMarkedFiles)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MoveCompletedMessage)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MoveCompletedMessageWithSpace)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectMoveTargetTitle)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectMoveTargetContent)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ChangeFolder)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FolderChangedTo)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EnableDebugLogging)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EnableDebugLoggingTip)));
         }
 
-        // 便于在XAML中绑定的属性
+        // 便于在XAML中绑定的属性（仅保留实际使用的键）
         public string AppTitle => this["AppTitle"];
         public string Language => this["Language"];
         public string SelectFolder => this["SelectFolder"];
@@ -130,16 +135,10 @@ namespace DuplicateFileFinderWPF
         public string Cancel => this["Cancel"];
         public string Delete => this["Delete"];
         public string FilePreview => this["FilePreview"];
-        public string Properties => this["Properties"];
         public string RotateRight => this["RotateRight"];
         public string ScannedFiles => this["ScannedFiles"];
         public string MarkedForDeletion => this["MarkedForDeletion"];
         public string Error => this["Error"];
-        public string Files => this["Files"];
-        public string SpaceToSave => this["SpaceToSave"];
-        public string Size => this["Size"];
-        public string LastModified => this["LastModified"];
-        public string Path => this["Path"];
         public string English => this["English"];
         public string Chinese => this["Chinese"];
         public string Settings => this["Settings"];
@@ -161,8 +160,6 @@ namespace DuplicateFileFinderWPF
         public string NoDuplicatesStatus => this["NoDuplicatesStatus"];
         public string CannotMarkAllFiles => this["CannotMarkAllFiles"];
         public string OperationRestriction => this["OperationRestriction"];
-        public string SettingsDialogTitle => this["SettingsDialogTitle"];
-        public string SettingsInDevelopment => this["SettingsInDevelopment"];
         public string OK => this["OK"];
         public string HelpDialogTitle => this["HelpDialogTitle"];
         public string HelpContent => this["HelpContent"];
@@ -198,5 +195,18 @@ namespace DuplicateFileFinderWPF
         public string ModificationDate => this["ModificationDate"];
         public string FileSize => this["FileSize"];
         public string FileLocation => this["FileLocation"];
+        public string Confirm => this["Confirm"];
+        public string OpenLocationTooltip => ShowInExplorer; // 复用“在资源管理器中显示”
+
+        // 移动到文件夹流程相关
+        public string ConfirmMoveMarkedFiles => this["ConfirmMoveMarkedFiles"];
+        public string MoveCompletedMessage => this["MoveCompletedMessage"];
+        public string SelectMoveTargetTitle => this["SelectMoveTargetTitle"];
+        public string SelectMoveTargetContent => this["SelectMoveTargetContent"];
+        public string ChangeFolder => this["ChangeFolder"];
+        public string FolderChangedTo => this["FolderChangedTo"];
+        public string MoveCompletedMessageWithSpace => this["MoveCompletedMessageWithSpace"];
+    public string EnableDebugLogging => this["EnableDebugLogging"];
+    public string EnableDebugLoggingTip => this["EnableDebugLoggingTip"];
     }
 }

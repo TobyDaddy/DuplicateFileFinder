@@ -8,7 +8,7 @@
         FontFamily="Microsoft YaHei UI, Segoe UI, PingFang SC, Hiragino Sans GB, sans-serif"
         ui:WindowHelper.UseModernWindowStyle="False"
         Loaded="MainWindow_Loaded"
-        ui:ThemeManager.IsThemeAware="True">
+    >
 
     <!-- 图标在 MainWindow_Loaded 事件中通过 C# 代码设置 -->
 
@@ -19,42 +19,407 @@
     </WindowChrome.WindowChrome>
 
     <Window.Resources>
-        <!-- 正确使用 ModernWpf 的 ThemeResources.ThemeDictionaries 定义 Light/Dark 资源 -->
-        <ui:ThemeResources>
-            <ui:ThemeResources.ThemeDictionaries>
-                <ResourceDictionary x:Key="Light">
-                    <SolidColorBrush x:Key="PrimaryBrush" Color="#2C5AA0"/>
-                    <SolidColorBrush x:Key="PrimaryLightBrush" Color="#4A7BC8"/>
-                    <SolidColorBrush x:Key="AccentBrush" Color="#4CAF50"/>
-                    <SolidColorBrush x:Key="AccentLightBrush" Color="#81C784"/>
-                    <SolidColorBrush x:Key="SurfaceBrush" Color="#FAFAFA"/>
-                    <SolidColorBrush x:Key="SurfaceDarkBrush" Color="#F5F5F5"/>
-                    <SolidColorBrush x:Key="BackgroundBrush" Color="#FFFFFF"/>
-                    <SolidColorBrush x:Key="TextPrimaryBrush" Color="#212121"/>
-                    <SolidColorBrush x:Key="TextSecondaryBrush" Color="#757575"/>
-                    <SolidColorBrush x:Key="DividerBrush" Color="#E0E0E0"/>
-                    <SolidColorBrush x:Key="WarningBrush" Color="#FF9800"/>
-                    <SolidColorBrush x:Key="ErrorBrush" Color="#F44336"/>
-                </ResourceDictionary>
-                <ResourceDictionary x:Key="Dark">
-                    <SolidColorBrush x:Key="PrimaryBrush" Color="#2C5AA0"/>
-                    <SolidColorBrush x:Key="PrimaryLightBrush" Color="#4A7BC8"/>
-                    <SolidColorBrush x:Key="AccentBrush" Color="#4CAF50"/>
-                    <SolidColorBrush x:Key="AccentLightBrush" Color="#81C784"/>
-                    <SolidColorBrush x:Key="SurfaceBrush" Color="#252526"/>
-                    <SolidColorBrush x:Key="SurfaceDarkBrush" Color="#2D2D2D"/>
-                    <SolidColorBrush x:Key="BackgroundBrush" Color="#1E1E1E"/>
-                    <SolidColorBrush x:Key="TextPrimaryBrush" Color="#FFFFFF"/>
-                    <SolidColorBrush x:Key="TextSecondaryBrush" Color="#B3FFFFFF"/>
-                    <SolidColorBrush x:Key="DividerBrush" Color="#3C3C3C"/>
-                    <SolidColorBrush x:Key="WarningBrush" Color="#FFB74D"/>
-                    <SolidColorBrush x:Key="ErrorBrush" Color="#EF5350"/>
-                </ResourceDictionary>
-            </ui:ThemeResources.ThemeDictionaries>
-        </ui:ThemeResources>
+        <!-- 专业配色方案定义 -->
+        <SolidColorBrush x:Key="PrimaryBrush" Color="#2C5AA0"/>
+        <SolidColorBrush x:Key="PrimaryLightBrush" Color="#4A7BC8"/>
+        <SolidColorBrush x:Key="AccentBrush" Color="#4CAF50"/>
+        <SolidColorBrush x:Key="AccentLightBrush" Color="#81C784"/>
+        <SolidColorBrush x:Key="SurfaceBrush" Color="#FAFAFA"/>
+        <SolidColorBrush x:Key="SurfaceDarkBrush" Color="#F5F5F5"/>
+        <SolidColorBrush x:Key="BackgroundBrush" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="TextPrimaryBrush" Color="#212121"/>
+        <SolidColorBrush x:Key="TextSecondaryBrush" Color="#757575"/>
+        <SolidColorBrush x:Key="DividerBrush" Color="#E0E0E0"/>
+        <SolidColorBrush x:Key="WarningBrush" Color="#FF9800"/>
+        <SolidColorBrush x:Key="ErrorBrush" Color="#F44336"/>
+        
+        <!-- 文件夹图标按钮样式 -->
+        <Style x:Key="FolderButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="{StaticResource DividerBrush}"/>
+            <Setter Property="Padding" Value="2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="3">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
+                                <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="{StaticResource SurfaceDarkBrush}"/>
+                                <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- 标题栏按钮样式 -->
+        <Style x:Key="TitleBarButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Width" Value="48"/>
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+            <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="3">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#15000000"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#25000000"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- 窗口控制按钮样式 -->
+        <Style x:Key="WindowButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Width" Value="46"/>
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+            <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#15000000"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#25000000"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- 主要按钮样式 -->
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="16,8"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="4" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#5A8FD3"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#1E3F73"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#CCCCCC"/>
+                                <Setter Property="Foreground" Value="#999999"/>
+                                <Setter Property="Cursor" Value="Arrow"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- 次要按钮样式 -->
+        <Style x:Key="SecondaryButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="{StaticResource DividerBrush}"/>
+            <Setter Property="Padding" Value="16,8"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#F0F0F0"/>
+                                <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#E8E8E8"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#F5F5F5"/>
+                                <Setter Property="Foreground" Value="#CCCCCC"/>
+                                <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                                <Setter Property="Cursor" Value="Arrow"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- 警告按钮样式 -->
+        <Style x:Key="WarningButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource WarningBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="16,8"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="4" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FFB74D"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#F57C00"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#CCCCCC"/>
+                                <Setter Property="Foreground" Value="#999999"/>
+                                <Setter Property="Cursor" Value="Arrow"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- 危险按钮样式 -->
+        <Style x:Key="DangerButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#E57373"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="16,8"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="4" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#EF9A9A"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#C62828"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#CCCCCC"/>
+                                <Setter Property="Foreground" Value="#999999"/>
+                                <Setter Property="Cursor" Value="Arrow"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- 自定义复选框样式 -->
+        <Style x:Key="CustomCheckBoxStyle" TargetType="CheckBox">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <!-- 复选框区域 -->
+                            <Border Grid.Column="0" Width="18" Height="18" 
+                                    BorderBrush="{StaticResource DividerBrush}" 
+                                    BorderThickness="2" CornerRadius="3" Margin="0,0,8,0"
+                                    Background="{TemplateBinding Background}"
+                                    Cursor="Hand">
+                                <Path x:Name="CheckMark" 
+                                      Data="M 1 1 L 7 7 M 7 1 L 1 7" 
+                                      Stroke="White" StrokeThickness="2.5" 
+                                      Visibility="Collapsed"
+                                      HorizontalAlignment="Center" 
+                                      VerticalAlignment="Center"/>
+                            </Border>
+                            
+                            <!-- 文本内容区域 - 不响应鼠标事件 -->
+                            <ContentPresenter Grid.Column="1" 
+                                            HorizontalAlignment="Left" 
+                                            VerticalAlignment="Center"
+                                            IsHitTestVisible="False"/>
+                        </Grid>
+                        
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="CheckMark" Property="Visibility" Value="Visible"/>
+                                <Setter Property="Background" Value="{StaticResource ErrorBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{StaticResource PrimaryLightBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- TreeView样式 -->
+        <Style x:Key="ModernTreeViewStyle" TargetType="TreeView">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="8"/>
+        </Style>
+        
+        <!-- TreeViewItem样式 -->
+        <Style x:Key="ModernTreeViewItemStyle" TargetType="TreeViewItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Padding" Value="4"/>
+            <Setter Property="Margin" Value="0,2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TreeViewItem">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            
+                            <Border Grid.Row="0" Background="{TemplateBinding Background}" 
+                                    CornerRadius="4" Padding="{TemplateBinding Padding}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <!-- 展开/折叠按钮 -->
+                                    <ToggleButton Grid.Column="0" x:Name="Expander" 
+                                                  IsChecked="{Binding Path=IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
+                                                  ClickMode="Press" Margin="0,0,8,0"
+                                                  Width="16" Height="16" Background="Transparent" BorderThickness="0">
+                                        <ToggleButton.Style>
+                                            <Style TargetType="ToggleButton">
+                                                <Setter Property="Content" Value="▶"/>
+                                                <Setter Property="FontSize" Value="10"/>
+                                                <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsChecked" Value="True">
+                                                        <Setter Property="Content" Value="▼"/>
+                                                    </Trigger>
+                                                    <DataTrigger Binding="{Binding HasItems, RelativeSource={RelativeSource TemplatedParent}}" Value="False">
+                                                        <Setter Property="Visibility" Value="Hidden"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ToggleButton.Style>
+                                    </ToggleButton>
+                                    
+                                    <!-- 内容 -->
+                                    <ContentPresenter Grid.Column="1" x:Name="PART_Header" 
+                                                      ContentSource="Header" 
+                                                      HorizontalAlignment="Left" 
+                                                      VerticalAlignment="Center"/>
+                                </Grid>
+                            </Border>
+                            
+                            <!-- 子项容器 -->
+                            <ItemsPresenter Grid.Row="1" x:Name="ItemsHost" 
+                                            Margin="3,0,0,0"/>
+                        </Grid>
+                        
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsExpanded" Value="false">
+                                <Setter TargetName="ItemsHost" Property="Visibility" Value="Collapsed"/>
+                            </Trigger>
+                            <Trigger Property="HasItems" Value="false">
+                                <Setter TargetName="Expander" Property="Visibility" Value="Hidden"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="true">
+                                <Setter Property="Background" Value="#E3F2FD"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" Value="#F5F5F5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- Slider样式 -->
+        <Style x:Key="SliderButtonStyle" TargetType="RepeatButton">
+            <Setter Property="SnapsToDevicePixels" Value="true"/>
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="IsTabStop" Value="false"/>
+            <Setter Property="Focusable" Value="false"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RepeatButton">
+                        <Border Background="{TemplateBinding Background}" Height="4" CornerRadius="2"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style x:Key="SliderThumbStyle" TargetType="Thumb">
+            <Setter Property="SnapsToDevicePixels" Value="true"/>
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="Height" Value="12"/>
+            <Setter Property="Width" Value="12"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Thumb">
+                        <Ellipse Fill="White" Stroke="#80FFFFFF" StrokeThickness="1"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
-    <Grid Background="{DynamicResource SurfaceBrush}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="44"/>  <!-- 标题栏 -->
             <RowDefinition Height="Auto"/>
@@ -62,8 +427,13 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         
+        <!-- 设置整体背景 -->
+        <Grid.Background>
+            <StaticResource ResourceKey="SurfaceBrush"/>
+        </Grid.Background>
+
         <!-- 真正的标题栏 -->
-        <Grid Grid.Row="0" Background="{DynamicResource BackgroundBrush}">
+        <Grid Grid.Row="0" Background="{StaticResource BackgroundBrush}">
             <Grid.Effect>
                 <DropShadowEffect Color="Black" Direction="270" ShadowDepth="1" Opacity="0.1" BlurRadius="3"/>
             </Grid.Effect>
@@ -83,7 +453,7 @@
             <!-- 应用标题 -->
             <TextBlock Grid.Column="1" Text="{Binding Source={x:Static local:LocalizationManager.Instance}, Path=AppTitle}" 
                        VerticalAlignment="Center" FontWeight="SemiBold" FontSize="14"
-                       Foreground="{DynamicResource TextPrimaryBrush}"/>
+                       Foreground="{StaticResource TextPrimaryBrush}"/>
             
             <!-- 自定义按钮 -->
             <StackPanel Grid.Column="2" Orientation="Horizontal">
@@ -136,8 +506,8 @@
         </Grid>
 
         <!-- 顶部工具栏 -->
-        <Border Grid.Row="1" Background="{DynamicResource BackgroundBrush}" 
-                BorderBrush="{DynamicResource DividerBrush}" 
+        <Border Grid.Row="1" Background="{StaticResource BackgroundBrush}" 
+                BorderBrush="{StaticResource DividerBrush}" 
                 BorderThickness="0,0,0,1" Padding="24,20">
             <Border.Effect>
                 <DropShadowEffect Color="Black" Direction="270" ShadowDepth="1" Opacity="0.05" BlurRadius="2"/>
@@ -145,12 +515,12 @@
             <StackPanel Orientation="Horizontal">
                 <Label Content="{Binding Source={x:Static local:LocalizationManager.Instance}, Path=SelectFolder}" 
                        VerticalAlignment="Center" FontWeight="SemiBold" 
-                       Margin="0,0,12,0" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                       Margin="0,0,12,0" Foreground="{StaticResource TextPrimaryBrush}"/>
                 <TextBox x:Name="FolderPathTextBox" Width="400" Height="36"
                          Text=""
                          VerticalAlignment="Center" Margin="0,0,12,0"
                          Padding="12,8" FontSize="13"
-                         BorderBrush="{DynamicResource DividerBrush}" BorderThickness="1"
+                         BorderBrush="{StaticResource DividerBrush}" BorderThickness="1"
                          KeyDown="FolderPathTextBox_KeyDown"/>
                 <Button x:Name="BrowseButton" Content="📁" Click="BrowseButton_Click" 
                         ToolTip="{Binding Source={x:Static local:LocalizationManager.Instance}, Path=Browse}" 
@@ -177,16 +547,17 @@
         </Border>
 
         <!-- 主内容区域 -->
-        <Grid Grid.Row="2" Margin="24" x:Name="MainContentGrid">
+        <Grid Grid.Row="2" Margin="24" x:Name="MainContentGrid" SizeChanged="MainContentGrid_SizeChanged">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*" x:Name="FileListColumn"/>
-                <ColumnDefinition Width="8" x:Name="SplitterColumn"/>
-                <ColumnDefinition Width="2*" x:Name="PreviewColumn"/>
+                <ColumnDefinition Width="3*" x:Name="FileListColumn" MinWidth="260"/>
+                <!-- 启动默认折叠右侧预览区与分隔条，避免中间列表未铺满的问题 -->
+                <ColumnDefinition Width="0" x:Name="SplitterColumn"/>
+                <ColumnDefinition Width="0" x:Name="PreviewColumn" MinWidth="0"/>
             </Grid.ColumnDefinitions>
 
             <!-- 左侧文件树 -->
-            <Border Grid.Column="0" Background="{DynamicResource BackgroundBrush}"
-                    BorderBrush="{DynamicResource DividerBrush}"
+            <Border Grid.Column="0" Grid.ColumnSpan="3" x:Name="FileListBorder" Background="{StaticResource BackgroundBrush}"
+                    BorderBrush="{StaticResource DividerBrush}"
                     BorderThickness="1" CornerRadius="8" Padding="20">
                 <Border.Effect>
                     <DropShadowEffect Color="Black" Direction="270" ShadowDepth="2" Opacity="0.08" BlurRadius="8"/>
@@ -199,7 +570,7 @@
                     
                     <TextBlock Grid.Row="0" Text="{Binding Source={x:Static local:LocalizationManager.Instance}, Path=FileList}" FontWeight="SemiBold" 
                                FontSize="16" Margin="0,0,0,16"
-                               Foreground="{DynamicResource TextPrimaryBrush}"/>
+                               Foreground="{StaticResource TextPrimaryBrush}"/>
                     <TreeView x:Name="FileTreeView" Grid.Row="1" 
                               SelectedItemChanged="FileTreeView_SelectedItemChanged"
                               Style="{StaticResource ModernTreeViewStyle}"
@@ -213,13 +584,14 @@
             </Border>
 
             <!-- 分隔符 -->
-            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" 
-                          Background="{DynamicResource DividerBrush}" Margin="2,0"/>
+            <GridSplitter Grid.Column="1" x:Name="MainSplitter" HorizontalAlignment="Stretch" Visibility="Collapsed"
+                          Background="{StaticResource DividerBrush}" Margin="2,0"
+                          ShowsPreview="True" Width="8" ResizeBehavior="PreviousAndNext"/>
 
-            <!-- 右侧预览区域 -->
-            <Border Grid.Column="2" x:Name="PreviewBorder" Background="{DynamicResource BackgroundBrush}"
-                    BorderBrush="{DynamicResource DividerBrush}"
-                    BorderThickness="1" CornerRadius="8" Padding="20">
+        <!-- 右侧预览区域（启动默认隐藏，按需展开） -->
+        <Border Grid.Column="2" x:Name="PreviewBorder" Background="{StaticResource BackgroundBrush}"
+                    BorderBrush="{StaticResource DividerBrush}"
+            BorderThickness="1" CornerRadius="8" Padding="20" Visibility="Collapsed">
                 <Border.Effect>
                     <DropShadowEffect Color="Black" Direction="270" ShadowDepth="2" Opacity="0.08" BlurRadius="8"/>
                 </Border.Effect>
@@ -239,7 +611,7 @@
                         <TextBlock Grid.Column="0" Text="{Binding Source={x:Static local:LocalizationManager.Instance}, Path=FilePreviewTitle}" FontWeight="SemiBold" 
                                    FontSize="16" Margin="0,0,0,16"
                                    VerticalAlignment="Center"
-                                   Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                   Foreground="{StaticResource TextPrimaryBrush}"/>
                         
                         <!-- 旋转按钮 - 只有图片显示时可见 -->
                         <Button Grid.Column="1" x:Name="RotateButton" 
@@ -445,11 +817,12 @@
                             <!-- 无预览 -->
                             <TextBlock x:Name="NoPreviewText" Text="选择文件以预览" 
                                        HorizontalAlignment="Center" VerticalAlignment="Center"
-                                       FontSize="16" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                       FontSize="16" Foreground="{StaticResource TextSecondaryBrush}"
+                                       Visibility="Collapsed"/>
                         </Grid>
                         
                         <!-- 分隔线 -->
-                        <Border Grid.Row="1" Background="{DynamicResource DividerBrush}" Margin="0,8"/>
+                        <Border Grid.Row="1" Background="{StaticResource DividerBrush}" Margin="0,8"/>
                         
                         <!-- 下部分：文件属性 -->
                         <Grid Grid.Row="2" Margin="0,8,0,0">
@@ -460,7 +833,7 @@
                             
                             <TextBlock Grid.Row="0" Text="{Binding Source={x:Static local:LocalizationManager.Instance}, Path=FileProperties}" FontWeight="SemiBold" 
                                        FontSize="14" Margin="0,0,0,8"
-                                       Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                       Foreground="{StaticResource TextPrimaryBrush}"/>
                             
                             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" 
                                          HorizontalScrollBarVisibility="Disabled">
@@ -488,31 +861,31 @@
                                             <!-- 创建日期 -->
                                             <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding CreationDate, FallbackValue='Creation Date:'}" 
                                                        Margin="0,2,8,2" FontWeight="Medium"
-                                                       Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                                       Foreground="{StaticResource TextSecondaryBrush}"/>
                                             <TextBlock Grid.Row="0" Grid.Column="1" x:Name="CreationDateText" 
                                                        Text="-" Margin="0,2" TextWrapping="Wrap"
-                                                       Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                                       Foreground="{StaticResource TextPrimaryBrush}"/>
                                             
                                             <!-- 修改日期 -->
                                             <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding ModificationDate, FallbackValue='Modification Date:'}" 
                                                        Margin="0,2,8,2" FontWeight="Medium"
-                                                       Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                                       Foreground="{StaticResource TextSecondaryBrush}"/>
                                             <TextBlock Grid.Row="1" Grid.Column="1" x:Name="ModificationDateText" 
                                                        Text="-" Margin="0,2" TextWrapping="Wrap"
-                                                       Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                                       Foreground="{StaticResource TextPrimaryBrush}"/>
                                             
                                             <!-- 文件大小 -->
                                             <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding FileSize, FallbackValue='File Size:'}" 
                                                        Margin="0,2,8,2" FontWeight="Medium"
-                                                       Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                                       Foreground="{StaticResource TextSecondaryBrush}"/>
                                             <TextBlock Grid.Row="2" Grid.Column="1" x:Name="FileSizeText" 
                                                        Text="-" Margin="0,2" TextWrapping="Wrap"
-                                                       Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                                       Foreground="{StaticResource TextPrimaryBrush}"/>
                                             
                                             <!-- 文件位置 -->
                                             <TextBlock Grid.Row="3" Grid.Column="0" Text="{Binding FileLocation, FallbackValue='File Location:'}" 
                                                        Margin="0,2,8,2" FontWeight="Medium"
-                                                       Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                                       Foreground="{StaticResource TextSecondaryBrush}"/>
                                             <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Margin="0,2">
                                                 <Button x:Name="OpenLocationButton" 
                                                        Width="20" Height="20" Margin="0,0,8,0"
@@ -520,13 +893,13 @@
                                                        ToolTip="{Binding OpenLocationTooltip}"
                                                        Background="Transparent" BorderThickness="0"
                                                        Padding="2">
-                                                    <Path Fill="{DynamicResource AccentBrush}" 
+                                                    <Path Fill="{StaticResource AccentBrush}" 
                                                           Data="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z"
                                                           Stretch="Uniform" Width="12" Height="12"/>
                                                 </Button>
                                                 <TextBlock x:Name="FileLocationText" 
                                                            Text="-" TextWrapping="Wrap" VerticalAlignment="Center"
-                                                           Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                                           Foreground="{StaticResource TextPrimaryBrush}"/>
                                             </StackPanel>
                                         </Grid>
                                     </Grid>
@@ -539,16 +912,16 @@
         </Grid>
 
         <!-- 底部状态栏 -->
-        <Border Grid.Row="3" Background="{DynamicResource BackgroundBrush}" 
-                BorderBrush="{DynamicResource DividerBrush}" 
+        <Border Grid.Row="3" Background="{StaticResource BackgroundBrush}" 
+                BorderBrush="{StaticResource DividerBrush}" 
                 BorderThickness="0,1,0,0" Padding="24,12">
             <StackPanel Orientation="Horizontal">
                 <TextBlock x:Name="StatusText" Text="{Binding Source={x:Static local:LocalizationManager.Instance}, Path=Ready}" VerticalAlignment="Center" 
-                           Margin="0,0,20,0" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                           Margin="0,0,20,0" Foreground="{StaticResource TextPrimaryBrush}"/>
                 <ProgressBar x:Name="ScanProgressBar" Width="200" Height="4"
                            Visibility="Collapsed" VerticalAlignment="Center"
-                           Background="{DynamicResource SurfaceDarkBrush}"
-                           Foreground="{DynamicResource PrimaryBrush}"/>
+                           Background="{StaticResource SurfaceDarkBrush}"
+                           Foreground="{StaticResource PrimaryBrush}"/>
             </StackPanel>
         </Border>
     </Grid>

@@ -117,6 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+
+  <!-- 应用 & 通用 -->
   <data name="AppTitle" xml:space="preserve">
     <value>重复文件查找器 - 专业版</value>
     <comment/>
@@ -141,96 +143,12 @@
     <value>取消</value>
     <comment/>
   </data>
-  <data name="StartCleanup" xml:space="preserve">
-    <value>开始清理重复文件</value>
-    <comment/>
-  </data>
   <data name="Delete" xml:space="preserve">
     <value>删除</value>
     <comment/>
   </data>
-  <data name="Open" xml:space="preserve">
-    <value>打开</value>
-    <comment/>
-  </data>
-  <data name="ShowFileLocation" xml:space="preserve">
-    <value>显示文件位置</value>
-    <comment/>
-  </data>
-  <data name="Properties" xml:space="preserve">
-    <value>属性</value>
-    <comment/>
-  </data>
-  <data name="PreviewGroup" xml:space="preserve">
-    <value>预览重复组</value>
-    <comment/>
-  </data>
-  <data name="MarkDelete" xml:space="preserve">
-    <value>标记删除</value>
-    <comment/>
-  </data>
   <data name="FilePreview" xml:space="preserve">
     <value>文件预览</value>
-    <comment/>
-  </data>
-  <data name="UnsupportedFileType" xml:space="preserve">
-    <value>不支持的文件类型。</value>
-    <comment/>
-  </data>
-  <data name="InvalidDirectory" xml:space="preserve">
-    <value>提供的路径不是有效的目录。</value>
-    <comment/>
-  </data>
-  <data name="InvalidFilePath" xml:space="preserve">
-    <value>无效的文件路径</value>
-    <comment/>
-  </data>
-  <data name="CannotShowProperties" xml:space="preserve">
-    <value>无法显示文件属性窗口。</value>
-    <comment/>
-  </data>
-  <data name="ConfirmDeleteFile" xml:space="preserve">
-    <value>您确定要删除文件吗</value>
-    <comment/>
-  </data>
-  <data name="ConfirmDelete" xml:space="preserve">
-    <value>确定删除</value>
-    <comment/>
-  </data>
-  <data name="SearchCancelled" xml:space="preserve">
-    <value>搜索已取消。</value>
-    <comment/>
-  </data>
-  <data name="NoDuplicatesFound" xml:space="preserve">
-    <value>未找到重复文件。</value>
-    <comment/>
-  </data>
-  <data name="TotalDuplicatesFound" xml:space="preserve">
-    <value>总共找到的重复文件</value>
-    <comment/>
-  </data>
-  <data name="CannotGetFolderPath" xml:space="preserve">
-    <value>无法获取文件夹路径。</value>
-    <comment/>
-  </data>
-  <data name="MarkDeleteFormTitle" xml:space="preserve">
-    <value>标记删除</value>
-    <comment/>
-  </data>
-  <data name="MarkSingleFile" xml:space="preserve">
-    <value>仅标记当前文件</value>
-    <comment/>
-  </data>
-  <data name="UnmarkSingleFile" xml:space="preserve">
-    <value>取消当前文件标记</value>
-    <comment/>
-  </data>
-  <data name="MarkSameFolder" xml:space="preserve">
-    <value>标记当前文件所在文件夹中的所有重复文件</value>
-    <comment/>
-  </data>
-  <data name="MarkDeleteFormInfo" xml:space="preserve">
-    <value>您可以标记需要删除的文件，注意标记并不会实际执行删除操作，您可以随时取消标记。</value>
     <comment/>
   </data>
   <data name="Confirm" xml:space="preserve">
@@ -247,70 +165,6 @@
   </data>
   <data name="Error" xml:space="preserve">
     <value>错误</value>
-    <comment/>
-  </data>
-  <data name="ConfirmDeleteAllMarkedFiles" xml:space="preserve">
-    <value>确定要删除所有标记的文件吗？</value>
-    <comment/>
-  </data>
-  <data name="RotateRight" xml:space="preserve">
-    <value>向右旋转90度</value>
-    <comment/>
-  </data>
-  <data name="Files" xml:space="preserve">
-    <value>个文件</value>
-    <comment/>
-  </data>
-  <data name="SpaceToSave" xml:space="preserve">
-    <value>可节省空间</value>
-    <comment/>
-  </data>
-  <data name="Size" xml:space="preserve">
-    <value>大小</value>
-    <comment/>
-  </data>
-  <data name="LastModified" xml:space="preserve">
-    <value>修改时间</value>
-    <comment/>
-  </data>
-  <data name="Path" xml:space="preserve">
-    <value>路径</value>
-    <comment/>
-  </data>
-  <data name="English" xml:space="preserve">
-    <value>English</value>
-    <comment/>
-  </data>
-  <data name="Chinese" xml:space="preserve">
-    <value>中文</value>
-    <comment/>
-  </data>
-  <data name="Settings" xml:space="preserve">
-    <value>设置</value>
-    <comment/>
-  </data>
-  <data name="Help" xml:space="preserve">
-    <value>帮助</value>
-    <comment/>
-  </data>
-  <data name="Minimize" xml:space="preserve">
-    <value>最小化</value>
-    <comment/>
-  </data>
-  <data name="Maximize" xml:space="preserve">
-    <value>最大化</value>
-    <comment/>
-  </data>
-  <data name="Close" xml:space="preserve">
-    <value>关闭</value>
-    <comment/>
-  </data>
-  <data name="DeleteMarkedFiles" xml:space="preserve">
-    <value>删除标记文件</value>
-    <comment/>
-  </data>
-  <data name="ShowInExplorer" xml:space="preserve">
-    <value>在资源管理器中显示</value>
     <comment/>
   </data>
   <data name="Ready" xml:space="preserve">
@@ -353,93 +207,42 @@
     <value>未发现重复文件，扫描了 {0} 个文件</value>
     <comment/>
   </data>
-  <data name="CannotMarkAllFiles" xml:space="preserve">
-    <value>不能将重复组中的所有文件都标记为删除！至少需要保留一个文件。</value>
-    <comment/>
-  </data>
-  <data name="OperationRestriction" xml:space="preserve">
-    <value>操作限制</value>
-    <comment/>
-  </data>
-  <data name="SettingsDialogTitle" xml:space="preserve">
-    <value>设置</value>
-    <comment/>
-  </data>
-  <data name="SettingsInDevelopment" xml:space="preserve">
-    <value>设置功能正在开发中...</value>
-    <comment/>
-  </data>
-  <data name="OK" xml:space="preserve">
-    <value>确定</value>
-    <comment/>
-  </data>
-  <data name="HelpDialogTitle" xml:space="preserve">
-    <value>帮助</value>
-    <comment/>
-  </data>
-  <data name="HelpContent" xml:space="preserve">
-    <value>重复文件查找器 v2.0
-
-功能:
-• 扫描重复文件
-• 图片和视频预览
-• 现代化界面</value>
-    <comment/>
-  </data>
-  <data name="SelectFolderDescription" xml:space="preserve">
-    <value>选择要扫描的文件夹</value>
-    <comment/>
-  </data>
-  <data name="CancellingScan" xml:space="preserve">
-    <value>正在取消扫描...</value>
-    <comment/>
-  </data>
   <data name="CancellingScanStatus" xml:space="preserve">
     <value>正在取消扫描...</value>
     <comment/>
   </data>
-  <data name="ScanFiles" xml:space="preserve">
-    <value>扫描文件</value>
-    <comment/>
-  </data>
-  <data name="FileList" xml:space="preserve">
-    <value>文件列表</value>
-    <comment/>
-  </data>
-  <data name="FilePreviewTitle" xml:space="preserve">
-    <value>文件预览</value>
+  <data name="RemainingGroupsStatus" xml:space="preserve">
+    <value>剩余 {0} 个重复组，标记删除 {1} 个文件</value>
     <comment/>
   </data>
   <data name="PreviewWithZoomAndDrag" xml:space="preserve">
     <value>预览: {0} (滚轮缩放，拖拽移动)</value>
     <comment/>
   </data>
-  <data name="CannotLoadImage" xml:space="preserve">
-    <value>无法加载图片: {0}</value>
-    <comment/>
-  </data>
   <data name="VideoLoading" xml:space="preserve">
     <value>视频: {0} (加载中...)</value>
     <comment/>
   </data>
-  <data name="CannotLoadVideo" xml:space="preserve">
-    <value>无法加载视频: {0}</value>
+
+  <!-- 资源管理器 & 属性 -->
+  <data name="ShowInExplorer" xml:space="preserve">
+    <value>在资源管理器中显示</value>
     <comment/>
   </data>
-  <data name="UnsupportedFileFormat" xml:space="preserve">
-    <value>不支持的文件格式</value>
+  <data name="CreationDate" xml:space="preserve">
+    <value>创建日期：</value>
     <comment/>
   </data>
-  <data name="SelectFileToPreview" xml:space="preserve">
-    <value>选择文件以预览</value>
+  <data name="ModificationDate" xml:space="preserve">
+    <value>修改日期：</value>
     <comment/>
   </data>
-  <data name="GetInfoFailed" xml:space="preserve">
-    <value>获取失败</value>
+  <data name="FileSize" xml:space="preserve">
+    <value>文件大小：</value>
     <comment/>
   </data>
-  <data name="RemainingGroupsStatus" xml:space="preserve">
-    <value>剩余 {0} 个重复组，标记删除 {1} 个文件</value>
+  <data name="FileLocation" xml:space="preserve">
+    <value>文件位置：</value>
     <comment/>
   </data>
   <data name="TotalGroupsStatus" xml:space="preserve">
@@ -447,7 +250,7 @@
     <comment/>
   </data>
   <data name="AllDuplicatesDeleted" xml:space="preserve">
-    <value>所有重复文件已删除</value>
+    <value>所有重复文件已移动</value>
     <comment/>
   </data>
   <data name="ScanningStatus" xml:space="preserve">
@@ -462,6 +265,8 @@
     <value>找到 {0} 个重复文件，扫描了 {1} 个文件，标记删除 {2} 个，将节省 {3}</value>
     <comment/>
   </data>
+
+  <!-- 视频 & 预览 -->
   <data name="VideoPlayError" xml:space="preserve">
     <value>视频播放错误: {0}</value>
     <comment/>
@@ -498,20 +303,140 @@
     <value>取消扫描</value>
     <comment/>
   </data>
-  <data name="CreationDate" xml:space="preserve">
-    <value>创建日期：</value>
+
+  <!-- 设置 & 帮助 -->
+  <data name="Settings" xml:space="preserve">
+    <value>设置</value>
     <comment/>
   </data>
-  <data name="ModificationDate" xml:space="preserve">
-    <value>修改日期：</value>
+  <data name="Help" xml:space="preserve">
+    <value>帮助</value>
     <comment/>
   </data>
-  <data name="FileSize" xml:space="preserve">
-    <value>文件大小：</value>
+  <data name="OK" xml:space="preserve">
+    <value>确定</value>
     <comment/>
   </data>
-  <data name="FileLocation" xml:space="preserve">
-    <value>文件位置：</value>
+  <data name="HelpDialogTitle" xml:space="preserve">
+    <value>帮助</value>
     <comment/>
   </data>
+  <data name="HelpContent" xml:space="preserve">
+    <value>重复文件查找器 v2.0
+
+功能:
+• 扫描重复文件
+• 图片和视频预览
+• 现代化界面</value>
+    <comment/>
+  </data>
+  <data name="SelectFolderDescription" xml:space="preserve">
+    <value>选择要扫描的文件夹</value>
+    <comment/>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>English</value>
+    <comment/>
+  </data>
+  <data name="Chinese" xml:space="preserve">
+    <value>中文</value>
+    <comment/>
+  </data>
+  <data name="Minimize" xml:space="preserve">
+    <value>最小化</value>
+    <comment/>
+  </data>
+  <data name="Maximize" xml:space="preserve">
+    <value>最大化</value>
+    <comment/>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>关闭</value>
+    <comment/>
+  </data>
+  <data name="DeleteMarkedFiles" xml:space="preserve">
+    <value>删除标记文件</value>
+    <comment/>
+  </data>
+
+  <!-- 预览 & 错误信息 -->
+  <data name="CannotLoadImage" xml:space="preserve">
+    <value>无法加载图片: {0}</value>
+    <comment/>
+  </data>
+  <data name="CannotLoadVideo" xml:space="preserve">
+    <value>无法加载视频: {0}</value>
+    <comment/>
+  </data>
+  <data name="UnsupportedFileFormat" xml:space="preserve">
+    <value>不支持的文件格式</value>
+    <comment/>
+  </data>
+  <data name="SelectFileToPreview" xml:space="preserve">
+    <value>选择文件以预览</value>
+    <comment/>
+  </data>
+  <data name="GetInfoFailed" xml:space="preserve">
+    <value>获取失败</value>
+    <comment/>
+  </data>
+
+  <!-- 移动到文件夹流程 -->
+  <data name="ConfirmMoveMarkedFiles" xml:space="preserve">
+    <value>确定将所有标记的重复文件移动到以下文件夹吗？
+{0}
+（可以在“设置”中更改此位置，便于日后恢复）</value>
+  </data>
+  <data name="MoveCompletedMessage" xml:space="preserve">
+    <value>已将所有标记的重复文件移动到：
+{0}</value>
+  </data>
+  <data name="MoveCompletedMessageWithSpace" xml:space="preserve">
+    <value>已将所有标记的重复文件移动到：
+{0}
+本次为您节省了空间：{1}</value>
+  </data>
+  <data name="SelectMoveTargetTitle" xml:space="preserve">
+    <value>删除到回收站目录</value>
+  </data>
+  <data name="SelectMoveTargetContent" xml:space="preserve">
+    <value>将删除的重复文件移动到此目录，便于恢复：</value>
+  </data>
+  <data name="ChangeFolder" xml:space="preserve">
+    <value>更改文件夹</value>
+  </data>
+  <data name="FolderChangedTo" xml:space="preserve">
+    <value>已将“删除的重复文件”存储位置修改为：{0}</value>
+  </data>
+  <data name="RotateRight" xml:space="preserve">
+    <value>向右旋转90度</value>
+  </data>
+  <data name="InvalidDirectory" xml:space="preserve">
+    <value>提供的路径不是有效的目录。</value>
+  </data>
+
+  <!-- 目录与预览标题 -->
+  <data name="FileList" xml:space="preserve">
+    <value>文件列表</value>
+  </data>
+  <data name="FilePreviewTitle" xml:space="preserve">
+    <value>文件预览</value>
+  </data>
+
+  <!-- 操作限制提醒 -->
+  <data name="CannotMarkAllFiles" xml:space="preserve">
+    <value>不能将重复组内所有文件都标记删除！至少保留一个文件。</value>
+  </data>
+  <data name="OperationRestriction" xml:space="preserve">
+    <value>操作限制</value>
+  </data>
+  
+  <!-- 调试日志开关 -->
+  <data name="EnableDebugLogging" xml:space="preserve">
+    <value>启用调试日志</value>
+  </data>
+  <data name="EnableDebugLoggingTip" xml:space="preserve">
+    <value>将详细诊断日志写入 AppData/DuplicateFileFinderWPF（便于问题定位）。启用后在操作过程中会增加少量磁盘写入。</value>
+  </data>
+
 </root>

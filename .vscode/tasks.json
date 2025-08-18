@@ -7,9 +7,103 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/DuplicateFileFinder/DuplicateFileFinderWPF.csproj"
+                "${workspaceFolder}/DuplicateFileFinder/DuplicateFileFinderWPF.csproj",
+                "-c","Debug"
             ],
-            "problemMatcher": "$msCompile"
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {"reveal": "silent", "panel": "shared"}
+        },
+        {
+            "label": "run",
+            "type": "process",
+            "command": "dotnet",
+            "dependsOn": ["build"],
+            "args": [
+                "run",
+                "--project","${workspaceFolder}/DuplicateFileFinder/DuplicateFileFinderWPF.csproj",
+                "-c","Debug"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "build-and-run",
+            "type": "process",
+            "command": "dotnet",
+            "dependsOn": ["build"],
+            "dependsOrder": "sequence",
+            "args": [
+                "run",
+                "--project","${workspaceFolder}/DuplicateFileFinder/DuplicateFileFinderWPF.csproj",
+                "-c","Debug"
+            ],
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "focus": false
+            }
+        },
+        {
+            "label": "build-release",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/DuplicateFileFinder/DuplicateFileFinderWPF.csproj",
+                "-c","Release"
+            ],
+            "problemMatcher": "$msCompile",
+            "presentation": {"reveal": "silent", "panel": "shared"}
+        },
+        {
+            "label": "publish-release",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "${workspaceFolder}/DuplicateFileFinder/DuplicateFileFinderWPF.csproj",
+                "-c","Release",
+                "-r","win10-x64",
+                "--self-contained","true",
+                "/p:PublishSingleFile=false",
+                "/p:PublishTrimmed=false",
+                "-o","${workspaceFolder}/publish/win10-x64"
+            ],
+            "problemMatcher": "$msCompile",
+            "presentation": {"reveal": "always", "panel": "dedicated"}
+        },
+        {
+            "label": "package-msix-hint",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-NoLogo","-NoProfile","-Command",
+                "Write-Host '手动 MSIX 打包步骤:'; \n",
+                "Write-Host '1) 已执行 publish-release 生成自包含目录: publish/win10-x64'; \n",
+                "Write-Host '2) 打开 MSIX Packaging Tool 选择 “应用程序包” -> 选择该目录中 DuplicateFileFinderWPF.exe'; \n",
+                "Write-Host '3) 选择 dist-sign/AppxManifest.xml 或工具向导中填写相同信息 (Identity/Logo/语言)'; \n",
+                "Write-Host '4) 使用之前生成的证书 (.pfx) 或创建新自签名，签名输出 .msix'; \n",
+                "Write-Host '5) 上传 Partner Center 并同步版本号 (AppxManifest 里的 Version 与商店一致)'; \n",
+                "Write-Host '完成。'"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "watch-run",
+            "type": "process",
+            "command": "dotnet",
+            "args": [
+                "watch",
+                "run",
+                "--project","${workspaceFolder}/DuplicateFileFinder/DuplicateFileFinderWPF.csproj",
+                "-c","Debug"
+            ],
+            "isBackground": true,
+            "problemMatcher": []
         }
     ]
 }

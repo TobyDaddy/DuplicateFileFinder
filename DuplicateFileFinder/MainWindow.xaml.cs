@@ -16,7 +16,6 @@ using ModernWpf.Controls;
 using System.Globalization;
 using System.Runtime.InteropServices; // + P/Invoke
 using System.Windows.Interop;        // + WindowInteropHelper
-using ModernWpf;
 
 namespace DuplicateFileFinderWPF
 {
@@ -50,6 +49,9 @@ namespace DuplicateFileFinderWPF
         // 保持小图标句柄存活，避免被GC释放导致标题栏图标丢失
         private System.Drawing.Icon? _smallCaptionIcon;
 
+    // 删除完成后强制隐藏预览的保护开关，避免时序导致的误展开
+    private bool _forcePreviewHidden = false;
+
         // Win32 设置窗口图标
         private const int WM_SETICON = 0x0080;
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
@@ -61,6 +63,7 @@ namespace DuplicateFileFinderWPF
             
             // 在InitializeComponent之后初始化语言设置
             InitializeLanguage();
+            Logger.Info("MainWindow initialized");
             
             // 删除：this.Loaded += MainWindow_Loaded;  // XAML 已绑定 Loaded 事件
             
@@ -75,10 +78,13 @@ namespace DuplicateFileFinderWPF
         {
             try
             {
+                // 先加载设置
+                SettingsService.Load();
+
                 // 暂时先使用中文作为默认语言
                 var systemCulture = System.Globalization.CultureInfo.CurrentUICulture;
                 string defaultLanguage = systemCulture.Name.StartsWith("zh") ? "zh-CN" : "en-US";
-                
+
                 LocalizationManager.Instance.ChangeLanguage(defaultLanguage);
             }
             catch (Exception ex)
@@ -92,18 +98,17 @@ namespace DuplicateFileFinderWPF
         {
             // 设置程序图标（混合方案：任务栏用PNG，标题栏左上角用ICO小图标）
             LoadApplicationIcon();
+            Logger.Info("MainWindow loaded: application icon set");
             
             // 初始化语言菜单状态
             UpdateLanguageMenuItems();
-
-            // 取消旧的主题菜单初始化（改为设置弹窗）
-            // UpdateThemeMenuItems();
         }
 
         private void LoadApplicationIcon()
         {
             try
             {
+                Logger.Info("LoadApplicationIcon start");
                 // 路径准备
                 string baseDir = AppDomain.CurrentDomain.BaseDirectory;
                 string icoPath = Path.Combine(baseDir, "Assets", "Icons", "app-icon.ico");
@@ -181,12 +186,14 @@ namespace DuplicateFileFinderWPF
                 Debug.WriteLine($"加载图标失败: {ex.Message}");
                 Console.WriteLine($"加载图标失败: {ex.Message}");
                 this.Icon = CreateProgramIcon();
+                Logger.Error($"LoadApplicationIcon failed: {ex.Message}");
             }
             finally
             {
                 // 刷新
                 this.InvalidateVisual();
                 this.Dispatcher.BeginInvoke(new Action(() => this.UpdateLayout()), System.Windows.Threading.DispatcherPriority.Render);
+                Logger.Info("LoadApplicationIcon finally: layout invalidated");
             }
         }
 
@@ -348,14 +355,38 @@ namespace DuplicateFileFinderWPF
 
                 DisplayDuplicateFiles(currentDuplicates, totalFilesScanned);
                 UpdateDeleteButtonState();
+
+                // 扫描结束后，若无重复项，确保右侧预览保持折叠，避免误展开
+                try
+                {
+                    int groupCount = currentDuplicates?.Count ?? 0;
+                    Logger.Info($"ScanCompleted: groups={groupCount}, scanned={totalFilesScanned}");
+                    if (groupCount == 0)
+                    {
+                        _forcePreviewHidden = true;
+                        ClearPreviewPane();
+                        UpdatePreviewVisibility();
+                        Logger.Info("No duplicates -> preview force-collapsed");
+                    }
+                    else
+                    {
+                        _forcePreviewHidden = false;
+                    }
+                }
+                catch { /* ignore */ }
             }
         }
 
         private void DisplayDuplicateFiles(List<List<string>> duplicates, int totalFilesScanned)
         {
             var localizer = LocalizationManager.Instance;
-            
+            Logger.Info($"DisplayDuplicateFiles start: groups={(duplicates?.Count ?? 0)}, scanned={totalFilesScanned}");
+
+            // 暂停选中变更处理，避免在构建树期间触发预览
+            try { FileTreeView.SelectedItemChanged -= FileTreeView_SelectedItemChanged; } catch { }
+
             FileTreeView.Items.Clear();
+            try { FileListBorder?.Focus(); } catch { }
             currentDuplicates = duplicates;
             totalScannedFiles = totalFilesScanned;
 
@@ -489,7 +520,14 @@ namespace DuplicateFileFinderWPF
                 StatusText.Text = string.Format(localizer.NoDuplicatesStatus, totalFilesScanned);
             }
 
-            UpdatePreviewVisibility(); // 更新预览区域可见性
+            // 构建完成后，默认折叠预览，等待用户明确点击再展开
+            _forcePreviewHidden = true;
+            ClearPreviewPane();
+            UpdatePreviewVisibility();
+            Logger.Info("DisplayDuplicateFiles end: preview collapsed awaiting user selection");
+            
+            // 恢复选中变更处理
+            try { FileTreeView.SelectedItemChanged += FileTreeView_SelectedItemChanged; } catch { }
             UpdateDeleteButtonState();
         }
 
@@ -520,8 +558,12 @@ namespace DuplicateFileFinderWPF
                 if (!CanToggleCheckBox(checkBox))
                 {
                     e.Handled = true; // 阻止状态改变
-                    System.Windows.MessageBox.Show(localizer.CannotMarkAllFiles, 
-                        localizer.OperationRestriction, MessageBoxButton.OK, MessageBoxImage.Warning);
+                    var warnDlg = new ConfirmDialog(localizer.CannotMarkAllFiles, ConfirmDialog.DialogButtons.Ok)
+                    {
+                        Owner = this,
+                        Title = localizer.OperationRestriction
+                    };
+                    warnDlg.ShowDialog();
                 }
             }
         }
@@ -738,24 +780,108 @@ namespace DuplicateFileFinderWPF
 
         private void UpdatePreviewVisibility()
         {
-            bool hasSelectedFile = FileTreeView.SelectedItem != null;
-            bool hasPreviewContent = PreviewImage.Visibility == Visibility.Visible || 
-                                   VideoPreviewGrid.Visibility == Visibility.Visible;
+            Logger.Info($"UpdatePreviewVisibility: forceHidden={_forcePreviewHidden}, fileCount={FileTreeView.Items.Count}, hasImage={PreviewImage.Visibility == Visibility.Visible}, hasVideo={VideoPreviewGrid.Visibility == Visibility.Visible}");
+            // 运行时解析列与控件引用（避免生成字段缺失）
+            var previewColumn = (ColumnDefinition)MainContentGrid.FindName("PreviewColumn") ?? PreviewColumn;
+            var splitterColumn = (ColumnDefinition)MainContentGrid.FindName("SplitterColumn") ?? SplitterColumn;
+            var fileListColumn = (ColumnDefinition)MainContentGrid.FindName("FileListColumn") ?? FileListColumn;
+            var previewBorder = (Border)MainContentGrid.FindName("PreviewBorder") ?? PreviewBorder;
+            var fileListBorder = (Border)MainContentGrid.FindName("FileListBorder") ?? FileListBorder;
+
+            // 如果处于强制隐藏预览状态，直接折叠并返回
+            if (_forcePreviewHidden)
+            {
+                previewColumn.MinWidth = 0;
+                previewColumn.Width = new GridLength(0);
+                splitterColumn.Width = new GridLength(0);
+                if (FindName("MainSplitter") is GridSplitter gs0) gs0.Visibility = Visibility.Collapsed;
+                previewBorder.Visibility = Visibility.Collapsed;
+                Grid.SetColumnSpan(fileListBorder, 3);
+                return;
+            }
+            // 仅当真的有可见的预览内容（图片或视频）时才显示右侧预览区
+            bool hasPreviewContent = PreviewImage.Visibility == Visibility.Visible ||
+                                     VideoPreviewGrid.Visibility == Visibility.Visible;
             
-            if (FileTreeView.Items.Count == 0 || (!hasSelectedFile && !hasPreviewContent))
+            if (FileTreeView.Items.Count == 0 || !hasPreviewContent)
             {
                 // 没有文件或（没有选中文件且没有预览内容）时，隐藏预览区域并扩展文件列表
-                PreviewColumn.Width = new GridLength(0);
-                SplitterColumn.Width = new GridLength(0);
-                PreviewBorder.Visibility = Visibility.Collapsed;
+                previewColumn.MinWidth = 0; // 确保不会被最小宽度撑开
+                previewColumn.Width = new GridLength(0);
+                splitterColumn.Width = new GridLength(0);
+                if (FindName("MainSplitter") is GridSplitter gs1) gs1.Visibility = Visibility.Collapsed;
+                previewBorder.Visibility = Visibility.Collapsed;
+
+                // 让文件列表跨越右侧两列，从而铺满到窗口右边
+                Grid.SetColumnSpan(fileListBorder, 3);
             }
             else
             {
                 // 有选中文件或有预览内容时，显示预览区域
-                PreviewColumn.Width = new GridLength(2, GridUnitType.Star);
-                SplitterColumn.Width = new GridLength(8);
-                PreviewBorder.Visibility = Visibility.Visible;
+                previewColumn.MinWidth = 240; // 恢复预览的最小宽度
+                previewColumn.Width = new GridLength(2, GridUnitType.Star);
+                splitterColumn.Width = new GridLength(8);
+                if (FindName("MainSplitter") is GridSplitter gs2) gs2.Visibility = Visibility.Visible;
+                previewBorder.Visibility = Visibility.Visible;
+
+                // 恢复文件列表为单列，不再跨列
+                Grid.SetColumnSpan(fileListBorder, 1);
             }
+        }
+
+        // 新增：强制展开预览区域（用于用户将分隔拖至最右后，重新选择文件时自动恢复显示）
+        private void EnsurePreviewPaneVisible()
+        {
+            Logger.Info("EnsurePreviewPaneVisible called");
+            var previewColumn = (ColumnDefinition)MainContentGrid.FindName("PreviewColumn") ?? PreviewColumn;
+            var splitterColumn = (ColumnDefinition)MainContentGrid.FindName("SplitterColumn") ?? SplitterColumn;
+            var fileListColumn = (ColumnDefinition)MainContentGrid.FindName("FileListColumn") ?? FileListColumn;
+            var previewBorder = (Border)MainContentGrid.FindName("PreviewBorder") ?? PreviewBorder;
+            var fileListBorder = (Border)MainContentGrid.FindName("FileListBorder") ?? FileListBorder;
+
+            if (_forcePreviewHidden)
+            {
+                // 强制隐藏时不展开
+                previewColumn.MinWidth = 0;
+                previewColumn.Width = new GridLength(0);
+                splitterColumn.Width = new GridLength(0);
+                if (FindName("MainSplitter") is GridSplitter gsX) gsX.Visibility = Visibility.Collapsed;
+                previewBorder.Visibility = Visibility.Collapsed;
+                Grid.SetColumnSpan(fileListBorder, 3);
+                return;
+            }
+
+            // 如果列表为空，则不要展开预览区，直接保持折叠状态
+            if (FileTreeView.Items.Count == 0)
+            {
+                previewColumn.MinWidth = 0;
+                previewColumn.Width = new GridLength(0);
+                splitterColumn.Width = new GridLength(0);
+                if (FindName("MainSplitter") is GridSplitter gs0) gs0.Visibility = Visibility.Collapsed;
+                previewBorder.Visibility = Visibility.Collapsed;
+                Grid.SetColumnSpan(fileListBorder, 3);
+                return;
+            }
+
+            // 先把左右两列都重置为星号宽度，并设置分隔列宽
+            fileListColumn.Width = new GridLength(3, GridUnitType.Star);
+            previewColumn.MinWidth = 240;
+            previewColumn.Width = new GridLength(2, GridUnitType.Star);
+            splitterColumn.Width = new GridLength(8);
+            previewBorder.Visibility = Visibility.Visible;
+
+            // 若此时实际宽度仍过小，等一帧布局后再强制一次，避免与 GridSplitter 拖拽中的绝对宽度竞争
+            this.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                if (previewColumn.ActualWidth < 60)
+                {
+                    fileListColumn.Width = new GridLength(3, GridUnitType.Star);
+                    previewColumn.MinWidth = 240;
+                    previewColumn.Width = new GridLength(2, GridUnitType.Star);
+                    splitterColumn.Width = new GridLength(8);
+                    previewBorder.Visibility = Visibility.Visible;
+                }
+            }), System.Windows.Threading.DispatcherPriority.Render);
         }
 
         private string FormatFileSize(long bytes)
@@ -783,50 +909,18 @@ namespace DuplicateFileFinderWPF
         #region 标题栏按钮事件
         private async void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            var localizer = LocalizationManager.Instance;
-
-            var dialog = new ContentDialog
+            var dlg = new SettingsDialog { Owner = this, Title = LocalizationManager.Instance.SelectMoveTargetTitle };
+            if (dlg.ShowDialog() == true)
             {
-                Title = localizer.Settings,
-                CloseButtonText = localizer.OK
-            };
-
-            // 构建设置面板（包含主题切换）
-            var panel = new System.Windows.Controls.StackPanel { Orientation = System.Windows.Controls.Orientation.Vertical, Margin = new Thickness(8) };
-            panel.Children.Add(new System.Windows.Controls.TextBlock { Text = "Theme", Margin = new Thickness(0,0,0,8), Foreground = (System.Windows.Media.Brush)FindResource("TextPrimaryBrush") });
-
-            var themeRow = new System.Windows.Controls.StackPanel { Orientation = System.Windows.Controls.Orientation.Horizontal };
-            var btnSystem = new System.Windows.Controls.Button { Content = "System", Margin = new Thickness(0,0,8,0), Style = (Style)FindResource("SecondaryButtonStyle") };
-            var btnLight  = new System.Windows.Controls.Button { Content = "Light",  Margin = new Thickness(0,0,8,0), Style = (Style)FindResource("SecondaryButtonStyle") };
-            var btnDark   = new System.Windows.Controls.Button { Content = "Dark",   Style = (Style)FindResource("SecondaryButtonStyle") };
-
-            btnSystem.Click += (s, _)=>
-            {
-                ThemeManager.Current.ApplicationTheme = null; // 跟随系统
-                DuplicateFileFinderWPF.Properties.Settings.Default.Theme = string.Empty;
-                DuplicateFileFinderWPF.Properties.Settings.Default.Save();
-            };
-            btnLight.Click += (s, _)=>
-            {
-                ThemeManager.Current.ApplicationTheme = ApplicationTheme.Light;
-                DuplicateFileFinderWPF.Properties.Settings.Default.Theme = "Light";
-                DuplicateFileFinderWPF.Properties.Settings.Default.Save();
-            };
-            btnDark.Click += (s, _)=>
-            {
-                ThemeManager.Current.ApplicationTheme = ApplicationTheme.Dark;
-                DuplicateFileFinderWPF.Properties.Settings.Default.Theme = "Dark";
-                DuplicateFileFinderWPF.Properties.Settings.Default.Save();
-            };
-
-            themeRow.Children.Add(btnSystem);
-            themeRow.Children.Add(btnLight);
-            themeRow.Children.Add(btnDark);
-
-            panel.Children.Add(themeRow);
-            dialog.Content = panel;
-
-            await dialog.ShowAsync();
+                SettingsService.SetMoveTargetFolder(dlg.SelectedFolder);
+                var infoDlg = new ConfirmDialog(string.Format(LocalizationManager.Instance.FolderChangedTo, dlg.SelectedFolder), ConfirmDialog.DialogButtons.Ok)
+                {
+                    Owner = this,
+                    Title = LocalizationManager.Instance.SelectMoveTargetTitle
+                };
+                infoDlg.ShowDialog();
+            }
+            await System.Threading.Tasks.Task.CompletedTask;
         }
 
         private void LanguageButton_Click(object sender, RoutedEventArgs e)
@@ -855,17 +949,29 @@ namespace DuplicateFileFinderWPF
         private void UpdateLanguageMenuItems()
         {
             var currentCulture = System.Threading.Thread.CurrentThread.CurrentUICulture.Name;
-            
-            if (currentCulture == "zh-CN")
+
+            // 通过 LanguageButton 的 ContextMenu 查找菜单项，避免直接依赖字段名
+            try
             {
-                ChineseMenuItem.Header = "中文 ✓";
-                EnglishMenuItem.Header = "English";
+                if (LanguageButton?.ContextMenu != null)
+                {
+                    var items = LanguageButton.ContextMenu.Items.OfType<System.Windows.Controls.MenuItem>().ToList();
+                    var zh = items.FirstOrDefault(i => string.Equals(i.Name, "ChineseMenuItem", StringComparison.OrdinalIgnoreCase));
+                    var en = items.FirstOrDefault(i => string.Equals(i.Name, "EnglishMenuItem", StringComparison.OrdinalIgnoreCase));
+
+                    if (currentCulture == "zh-CN")
+                    {
+                        if (zh != null) zh.Header = "中文 ✓";
+                        if (en != null) en.Header = "English";
+                    }
+                    else
+                    {
+                        if (zh != null) zh.Header = "中文";
+                        if (en != null) en.Header = "English ✓";
+                    }
+                }
             }
-            else
-            {
-                ChineseMenuItem.Header = "中文";
-                EnglishMenuItem.Header = "English ✓";
-            }
+            catch { /* ignore */ }
         }
 
         private void ChangeLanguage(string cultureCode)
@@ -873,19 +979,17 @@ namespace DuplicateFileFinderWPF
             try
             {
                 LocalizationManager.Instance.ChangeLanguage(cultureCode);
-                
                 // 更新UI - 由于绑定会自动更新大部分元素，这里处理一些特殊情况
                 UpdateUIAfterLanguageChange();
             }
             catch (Exception ex)
             {
-                var dialog = new ContentDialog
+                var errDlg = new ConfirmDialog($"Language change failed: {ex.Message}", ConfirmDialog.DialogButtons.Ok)
                 {
-                    Title = "Error",
-                    Content = $"Language change failed: {ex.Message}",
-                    CloseButtonText = "OK"
+                    Owner = this,
+                    Title = LocalizationManager.Instance.Error
                 };
-                _ = dialog.ShowAsync();
+                errDlg.ShowDialog();
             }
         }
 
@@ -969,13 +1073,13 @@ namespace DuplicateFileFinderWPF
         private async void HelpButton_Click(object sender, RoutedEventArgs e)
         {
             var localizer = LocalizationManager.Instance;
-            var dialog = new ContentDialog
+            var helpDlg = new ConfirmDialog(localizer.HelpContent, ConfirmDialog.DialogButtons.Ok)
             {
-                Title = localizer.HelpDialogTitle,
-                Content = localizer.HelpContent,
-                CloseButtonText = localizer.OK
+                Owner = this,
+                Title = localizer.HelpDialogTitle
             };
-            await dialog.ShowAsync();
+            helpDlg.ShowDialog();
+            await System.Threading.Tasks.Task.CompletedTask;
         }
         
         #region 窗口控制按钮事件
@@ -1034,6 +1138,7 @@ namespace DuplicateFileFinderWPF
         private void ScanButton_Click(object sender, RoutedEventArgs e)
         {
             var localizer = LocalizationManager.Instance;
+            Logger.Info("ScanButton_Click");
             
             // 如果当前正在扫描，则取消扫描
             if (backgroundWorker?.IsBusy == true)
@@ -1050,12 +1155,25 @@ namespace DuplicateFileFinderWPF
             string folderPath = FolderPathTextBox.Text;
             if (string.IsNullOrEmpty(folderPath) || !Directory.Exists(folderPath))
             {
-                System.Windows.MessageBox.Show("请选择一个有效的文件夹路径", "错误", MessageBoxButton.OK, MessageBoxImage.Warning);
+                Logger.Warn($"Invalid scan folder: '{folderPath}'");
+                var msg = LocalizationManager.Instance["InvalidDirectory"]; // 复用资源
+                var warn = new ConfirmDialog(string.IsNullOrWhiteSpace(msg) ? "请选择一个有效的文件夹路径" : msg, ConfirmDialog.DialogButtons.Ok)
+                {
+                    Owner = this,
+                    Title = localizer.Error
+                };
+                warn.ShowDialog();
                 return;
             }
 
             // 清空之前的结果
             FileTreeView.Items.Clear();
+            // 清空并折叠预览区，避免残留上一轮的图片/视频
+            ClearPreviewPane();
+            UpdatePreviewVisibility();
+            // 扫描开始时保持强制隐藏，直到真正预览某个文件再解除
+            _forcePreviewHidden = true;
+            Logger.Info("Scan started: preview force hidden");
             
             // 切换按钮状态为取消模式
             ScanButton.Content = "⏹️";
@@ -1071,26 +1189,82 @@ namespace DuplicateFileFinderWPF
 
         private void DeleteMarkedButton_Click(object sender, RoutedEventArgs e)
         {
-            var result = System.Windows.MessageBox.Show("确认删除所有标记的重复文件吗？此操作不可撤销！", 
-                "确认删除", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                
-            if (result == MessageBoxResult.Yes)
+            var localizer = LocalizationManager.Instance;
+            Logger.Info("DeleteMarkedButton_Click");
+
+            var targetFolder = SettingsService.GetMoveTargetFolder();
+            if (string.IsNullOrWhiteSpace(targetFolder))
             {
-                DeleteMarkedFiles();
+                targetFolder = SettingsService.GetDefaultMoveFolder();
+            }
+
+            Directory.CreateDirectory(targetFolder);
+
+            var message = string.Format(localizer.ConfirmMoveMarkedFiles, targetFolder);
+            var dlg = new ConfirmDialog(message) { Owner = this, Title = localizer.Confirm };
+            var ok = dlg.ShowDialog() == true;
+
+            if (ok)
+            {
+                Logger.Info("User confirmed move marked files");
+                // 在修改 TreeView 之前，先暂停选中变更回调并折叠预览，避免项目移除过程触发选择事件导致右侧闪现
+                try { FileTreeView.SelectedItemChanged -= FileTreeView_SelectedItemChanged; } catch { }
+                _forcePreviewHidden = true;
+                try { ClearPreviewPane(); UpdatePreviewVisibility(); } catch { }
+                try { FileListBorder?.Focus(); } catch { }
+
+                long savedBytesBefore = GetSpaceToSave();
+                MoveMarkedFiles(targetFolder);
                 RemoveEmptyGroups();
                 UpdateDeleteButtonState();
+                long savedBytesAfter = 0; // 移动后列表中不再包含这些文件
+                long savedBytes = savedBytesBefore - savedBytesAfter; // 即为刚刚节省空间
+                var savedText = FormatFileSize(Math.Max(savedBytes, 0));
+                var doneMsg = string.Format(localizer.MoveCompletedMessageWithSpace, targetFolder, savedText);
+
+                // 先更新状态栏文本
                 UpdateStatusAfterDeletion();
+
+                // 保险：再次清空/折叠（即便前面已做），确保对话框前保持一致状态
+                try { ClearPreviewPane(); UpdatePreviewVisibility(); } catch { }
+                Logger.Info("Preview cleared and hidden before done dialog (post-ops)");
+
+                // 强制一次布局/渲染，确保在弹窗前刷新完毕
+                try
+                {
+                    this.InvalidateVisual();
+                    this.UpdateLayout();
+                    this.Dispatcher.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.Render);
+                }
+                catch { /* 忽略渲染刷新中的非致命异常 */ }
+
+                // 强制一次布局/渲染，确保对话框出现前后台UI已刷新
+                try
+                {
+                    this.InvalidateVisual();
+                    this.UpdateLayout();
+                    this.Dispatcher.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.Render);
+                }
+                catch { /* 忽略渲染刷新中的非致命异常 */ }
+
+                // 最后再显示完成对话框
+                var doneDlg = new ConfirmDialog(doneMsg, ConfirmDialog.DialogButtons.Ok) { Owner = this, Title = localizer.Completed };
+                try { doneDlg.SetMessageWithClickablePath(doneMsg, targetFolder); } catch { /* 若方法失败则回退普通文本 */ }
+                doneDlg.ShowDialog();
+                // 恢复选中变更回调
+                try { FileTreeView.SelectedItemChanged += FileTreeView_SelectedItemChanged; } catch { }
+                Logger.Info("Move done dialog closed; selection changed handler restored");
             }
         }
 
-        private void DeleteMarkedFiles()
+        private void MoveMarkedFiles(string targetFolder)
         {
-            var itemsToRemove = new List<TreeViewItem>();
-
+            var localizer = LocalizationManager.Instance;
+            Logger.Info($"MoveMarkedFiles to '{targetFolder}' started");
             foreach (TreeViewItem groupItem in FileTreeView.Items)
             {
                 var filesToRemove = new List<TreeViewItem>();
-                
+
                 foreach (TreeViewItem fileItem in groupItem.Items)
                 {
                     if (fileItem.Header is System.Windows.Controls.CheckBox checkBox && checkBox.IsChecked == true && fileItem.Tag is string filePath)
@@ -1099,14 +1273,47 @@ namespace DuplicateFileFinderWPF
                         {
                             if (File.Exists(filePath))
                             {
-                                File.Delete(filePath);
+                                var safeSubFolder = DateTime.Now.ToString("yyyyMMdd");
+                                var destFolder = Path.Combine(targetFolder, safeSubFolder);
+                                Directory.CreateDirectory(destFolder);
+
+                                var fileName = Path.GetFileName(filePath);
+                                var destPath = Path.Combine(destFolder, fileName);
+
+                                // 若存在同名，追加计数后缀
+                                int counter = 1;
+                                while (File.Exists(destPath))
+                                {
+                                    var name = Path.GetFileNameWithoutExtension(fileName);
+                                    var ext = Path.GetExtension(fileName);
+                                    destPath = Path.Combine(destFolder, $"{name} ({counter++}){ext}");
+                                }
+
+                                try
+                                {
+                                    File.Move(filePath, destPath);
+                                    Logger.Info($"Moved '{filePath}' -> '{destPath}'");
+                                }
+                                catch (IOException)
+                                {
+                                    // 跨卷移动时退回为 Copy+Delete
+                                    File.Copy(filePath, destPath, overwrite: false);
+                                    File.Delete(filePath);
+                                    Logger.Info($"Copied+Deleted '{filePath}' -> '{destPath}' (cross-volume)");
+                                }
+
                                 filesToRemove.Add(fileItem);
                             }
                         }
                         catch (Exception ex)
                         {
-                            System.Windows.MessageBox.Show($"删除文件失败: {filePath}\n错误: {ex.Message}", 
-                                "删除错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                            Logger.Error($"Move failed for '{filePath}': {ex.Message}");
+                            var errDlg = new ConfirmDialog($"移动文件失败: {filePath}\n错误: {ex.Message}", ConfirmDialog.DialogButtons.Ok)
+                            {
+                                Owner = this,
+                                Title = localizer.Error
+                            };
+                            errDlg.ShowDialog();
                         }
                     }
                 }
@@ -1174,8 +1381,7 @@ namespace DuplicateFileFinderWPF
 
         private void FileTreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            UpdatePreviewVisibility(); // 更新预览区域可见性
-            
+            Logger.Info("FileTreeView_SelectedItemChanged");
             if (e.NewValue is TreeViewItem item)
             {
                 // 如果是叶节点（文件），直接预览
@@ -1186,7 +1392,6 @@ namespace DuplicateFileFinderWPF
                 // 如果是根节点（重复组），预览第一个文件
                 else if (item.Tag != null && item.Tag.GetType().GetProperty("Type")?.GetValue(item.Tag)?.ToString() == "group" && item.Items.Count > 0)
                 {
-                    // 找到第一个文件进行预览
                     foreach (TreeViewItem childItem in item.Items)
                     {
                         if (childItem.Tag is string childFilePath && File.Exists(childFilePath))
@@ -1197,11 +1402,38 @@ namespace DuplicateFileFinderWPF
                     }
                 }
             }
+
+            // 预览完成后根据当前内容更新
+            UpdatePreviewVisibility();
+            Logger.Info("FileTreeView selection handled; preview visibility updated");
+        }
+
+        // 新增：当主区域尺寸变化且右侧过窄时自动恢复预览区域（仅在有真实预览内容时）
+        private void MainContentGrid_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            // 只在有“真实可预览内容”（图片或视频）时考虑自动展开，避免 NoPreview 文本引发误展开
+            bool hasRealPreview = PreviewImage.Visibility == Visibility.Visible ||
+                                  VideoPreviewGrid.Visibility == Visibility.Visible;
+
+            if (_forcePreviewHidden)
+            {
+                Logger.Info($"SizeChanged ignored (forceHidden). previewW={PreviewColumn.ActualWidth:0.##}");
+                return;
+            }
+
+            if (hasRealPreview && PreviewColumn.ActualWidth < 80)
+            {
+                Logger.Info($"SizeChanged -> EnsurePreviewPaneVisible (w={PreviewColumn.ActualWidth:0.##})");
+                EnsurePreviewPaneVisible();
+            }
         }
 
         private void PreviewFile(string filePath)
         {
             var localizer = LocalizationManager.Instance;
+            // 即将显示真实预览，解除强制隐藏
+            _forcePreviewHidden = false;
+            Logger.Info($"PreviewFile '{filePath}'");
             _currentPreviewFile = filePath;
             var extension = Path.GetExtension(filePath).ToLower();
 
@@ -1244,23 +1476,24 @@ namespace DuplicateFileFinderWPF
                     SetupImageEvents();
                     
                     StatusText.Text = string.Format(localizer.PreviewWithZoomAndDrag, Path.GetFileName(filePath));
-                    
-                    StatusText.Text = string.Format(localizer.PreviewWithZoomAndDrag, Path.GetFileName(filePath));
+
+                    // 确保预览面板可见
+                    EnsurePreviewPaneVisible();
+                    Logger.Info("Image preview shown; ensured preview pane visible");
                 }
                 catch (Exception ex)
                 {
                     ShowNoPreview(string.Format(localizer.CannotLoadImage, ex.Message));
+                    Logger.Error($"Image preview failed: {ex.Message}");
                 }
             }
             else if (IsVideoFile(extension))
             {
                 try
                 {
-                    // 停止之前的视频
                     VideoPlayer.Stop();
                     videoTimer?.Stop();
                     
-                    // 隐藏旋转按钮（视频不需要旋转功能）
                     RotateButton.Visibility = Visibility.Collapsed;
                     
                     VideoPlayer.Source = new Uri(filePath);
@@ -1269,19 +1502,21 @@ namespace DuplicateFileFinderWPF
                     VideoProgressSlider.Value = 0;
                     VideoTimeText.Text = "00:00 / 00:00";
                     StatusText.Text = string.Format(localizer.VideoLoading, Path.GetFileName(filePath));
-                    
-                    // 改为不自动播放，等待用户手动点击播放
-                    PlayPauseButton.Content = "▶️";
-                    isVideoPlaying = false; // 初始状态为暂停
+
+                    // 确保预览面板可见
+                    EnsurePreviewPaneVisible();
+                    Logger.Info("Video preview initialized; ensured preview pane visible");
                 }
                 catch (Exception ex)
                 {
                     ShowNoPreview(string.Format(localizer.CannotLoadVideo, ex.Message));
+                    Logger.Error($"Video preview failed: {ex.Message}");
                 }
             }
             else
             {
                 ShowNoPreview(localizer.UnsupportedFileFormat);
+                Logger.Warn("Unsupported file format for preview");
             }
         }
 
@@ -1293,6 +1528,7 @@ namespace DuplicateFileFinderWPF
             
             NoPreviewText.Text = message ?? localizer.SelectFileToPreview;
             NoPreviewText.Visibility = Visibility.Visible;
+            Logger.Info($"ShowNoPreview: '{NoPreviewText.Text}'");
         }
 
         #region 视频播放控制
@@ -1548,13 +1784,70 @@ namespace DuplicateFileFinderWPF
 
         private async Task ShowErrorDialog(string message)
         {
-            var dialog = new ContentDialog
+            // 统一使用确认风格对话框呈现错误
+            var dlg = new ConfirmDialog(message) { Owner = this, Title = LocalizationManager.Instance.Error };
+            dlg.ShowDialog();
+            await System.Threading.Tasks.Task.CompletedTask;
+        }
+
+        // 清空预览区的所有内容并隐藏相关控件
+        private void ClearPreviewPane()
+        {
+            try
             {
-                Title = "错误",
-                Content = message,
-                CloseButtonText = "确定"
-            };
-            await dialog.ShowAsync();
+                Logger.Info("ClearPreviewPane start");
+                // 停止并清空视频
+                if (VideoPlayer.Source != null)
+                {
+                    VideoPlayer.Stop();
+                }
+                videoTimer?.Stop();
+                isVideoPlaying = false;
+                isVideoEnded = false;
+                VideoPlayer.Source = null;
+                VideoPreviewGrid.Visibility = Visibility.Collapsed;
+                PlayPauseButton.Content = "▶️";
+                VideoTimeText.Text = "00:00 / 00:00";
+                VideoProgressSlider.Value = 0;
+
+                // 清空并隐藏图片
+                PreviewImage.Source = null;
+                PreviewImage.Visibility = Visibility.Collapsed;
+                RotateButton.Visibility = Visibility.Collapsed;
+                // 重置图像变换状态
+                zoomFactor = 1.0;
+                imageOffset = new System.Windows.Point(0, 0);
+                currentRotationAngle = 0;
+                PreviewImage.RenderTransform = Transform.Identity;
+
+                // 隐藏“无预览”文本
+                NoPreviewText.Visibility = Visibility.Collapsed;
+
+                // 清空当前预览文件和文件属性
+                _currentPreviewFile = null;
+                CreationDateText.Text = "-";
+                ModificationDateText.Text = "-";
+                FileSizeText.Text = "-";
+                FileLocationText.Text = "-";
+                OpenLocationButton.Tag = null;
+
+                // 立即折叠预览列与分隔条，让文件列表铺满
+                var previewColumn = (ColumnDefinition)MainContentGrid.FindName("PreviewColumn") ?? PreviewColumn;
+                var splitterColumn = (ColumnDefinition)MainContentGrid.FindName("SplitterColumn") ?? SplitterColumn;
+                var fileListBorder = (Border)MainContentGrid.FindName("FileListBorder") ?? FileListBorder;
+                previewColumn.MinWidth = 0;
+                previewColumn.Width = new GridLength(0);
+                splitterColumn.Width = new GridLength(0);
+                if (FindName("MainSplitter") is GridSplitter gs) gs.Visibility = Visibility.Collapsed;
+                PreviewBorder.Visibility = Visibility.Collapsed;
+                Grid.SetColumnSpan(fileListBorder, 3);
+                Logger.Info("ClearPreviewPane done: preview collapsed and file list spanned");
+            }
+            catch
+            {
+                // 忽略清理过程中的非致命异常
+                Logger.Warn("ClearPreviewPane encountered non-fatal exception");
+            }
         }
 
         #region 图片缩放和拖拽功能
@@ -1739,7 +2032,12 @@ namespace DuplicateFileFinderWPF
                 }
                 catch (Exception ex)
                 {
-                    System.Windows.MessageBox.Show($"无法打开文件位置: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    var errDlg = new ConfirmDialog($"无法打开文件位置: {ex.Message}", ConfirmDialog.DialogButtons.Ok)
+                    {
+                        Owner = this,
+                        Title = LocalizationManager.Instance.Error
+                    };
+                    errDlg.ShowDialog();
                 }
             }
         }
@@ -1757,14 +2055,6 @@ namespace DuplicateFileFinderWPF
         }
         #endregion
         #endregion
-
-        private void UpdateThemeMenuItems()
-        {
-            // Legacy theme menu removed; no-op
-        }
-        
-        // 删除 ThemeSystemMenuItem_Click / ThemeLightMenuItem_Click / ThemeDarkMenuItem_Click
-        // 主题切换逻辑已在 SettingsButton_Click 中实现
     }
 }
 

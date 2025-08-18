@@ -15,13 +15,19 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <Win32Resource />
     <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
-    <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
-    <EnableWindowsFormsAnalyzers>false</EnableWindowsFormsAnalyzers>
+    <NoWarn>$(NoWarn);WFAC010</NoWarn>
+  <!-- 打包到 MSIX 建议使用自包含，避免目标机器缺少 .NET Desktop Runtime -->
+  <SelfContained>true</SelfContained>
+  <!-- 保持多文件结构，避免单文件内嵌加载时的路径/杀毒误报问题 -->
+  <PublishSingleFile>false</PublishSingleFile>
+  <!-- 不裁剪，防止误删反射/本地化资源 -->
+  <PublishTrimmed>false</PublishTrimmed>
+  <!-- 目标运行时：win10-x64；如需多架构可单独 publish 指定 -r -->
+  <RuntimeIdentifier>win10-x64</RuntimeIdentifier>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ModernWpfUI" Version="0.9.6" />
-    <PackageReference Include="FFmpeg.NET" Version="1.1.0" />
+  <PackageReference Include="ModernWpfUI" Version="0.9.6" />
   </ItemGroup>
 
   <ItemGroup>
